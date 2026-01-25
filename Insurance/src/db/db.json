@@ -1,0 +1,101 @@
+{
+  "users": [
+    {
+      "id": "u101",
+      "name": "Rohith Reddy",
+      "email": "rohith@gmail.com",
+      "password": "123456",
+      "role": "Admin"
+    },
+    {
+      "id": "u102",
+      "name": "Rithwika",
+      "email": "rithwika@gmail.com",
+      "password": "123456",
+      "role": "Customer"
+    },
+    {
+      "id": "u103",
+      "name": "Abhishek",
+      "email": "abhishek@gmail.com",
+      "password": "123456",
+      "role": "Agent"
+    }
+  ],
+
+  "policies": [
+    {
+      "id": "p201",
+      "policyName": "Health Secure Plus",
+      "type": "Health",
+      "premium": 12000,
+      "coverage": 500000,
+      "duration": "1 Year",
+      "description": "Comprehensive health insurance covering hospitalization expenses"
+    },
+    {
+      "id": "p202",
+      "policyName": "Life Protect Plan",
+      "type": "Life",
+      "premium": 15000,
+      "coverage": 1000000,
+      "duration": "10 Years",
+      "description": "Life insurance with long-term financial protection"
+    },
+    {
+      "id": "p203",
+      "policyName": "Motor Shield",
+      "type": "Vehicle",
+      "premium": 8000,
+      "coverage": 300000,
+      "duration": "1 Year",
+      "description": "Motor insurance covering accidental damages"
+    }
+  ],
+
+  "customerPolicies": [
+    {
+      "id": "cp301",
+      "customerId": "u102",
+      "policyId": "p201",
+      "startDate": "2024-01-01",
+      "endDate": "2024-12-31",
+      "paymentStatus": "Paid",
+      "status": "Active"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "c401",
+      "customerId": "u102",
+      "policyId": "p201",
+      "agentId": "u103",
+      "claimAmount": 25000,
+      "reason": "Hospitalization due to accident",
+      "status": "Pending",
+      "remarks": "",
+      "createdAt": "2024-03-10"
+    }
+  ],
+
+  "agents": [
+    {
+      "id": "a501",
+      "agentId": "u103",
+      "totalSales": 5,
+      "commissionEarned": 25000
+    }
+  ],
+
+  "payments": [
+    {
+      "id": "pay601",
+      "customerId": "u102",
+      "policyId": "p201",
+      "amount": 12000,
+      "paymentDate": "2024-01-01",
+      "status": "Success"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+<div class="p-6">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Customer Management</h1>
+    <p class="text-gray-500">View registered customers and policy details</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+
+    <table class="w-full text-left">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4">Customer ID</th>
+          <th class="p-4">User ID</th>
+          <th class="p-4">Nominee</th>
+          <th class="p-4">Policies</th>
+          <th class="p-4">Assigned Agent</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(c of customers; track $index) {
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-4 font-medium">{{ c.id }}</td>
+            <td class="p-4">{{ c.userId }}</td>
+            <td class="p-4">{{ c.nominee }}</td>
+            <td class="p-4">
+              {{ c.policies?.length || 0 }}
+            </td>
+            <td class="p-4">
+              {{ c.assignedAgent?.name || '-' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if(customers.length === 0){
+    <div class="p-6 text-center text-gray-500">
+      No customers found
+    </div>
+}
+  </div>
+
+</div>

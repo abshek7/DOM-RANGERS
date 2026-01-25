@@ -5,27 +5,41 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AdminService {
-
+  const_api='https://insurance-1-ylo4.onrender.com';  
   constructor(private http: HttpClient) {}
 
   getUsers() {
-    return this.http.get<any[]>("https://insurance-1-ylo4.onrender.com/users");
+    return this.http.get<any[]>(this.const_api + "/users");
   }
 
   getAgents() {
-    return this.http.get<any[]>("https://insurance-1-ylo4.onrender.com/agents");
+    return this.http.get<any[]>(this.const_api + "/agents");
   }
 
   getPolicies() {
-    return this.http.get<any[]>("https://insurance-1-ylo4.onrender.com/policies");
+    return this.http.get<any[]>(this.const_api + "/policies");
   }
 
   getClaims() {
-    return this.http.get<any[]>("https://insurance-1-ylo4.onrender.com/claims");
+    return this.http.get<any[]>(this.const_api + "/claims");
   }
 
   getPendingClaims() {
-    return this.http.get<any[]>("https://insurance-1-ylo4.onrender.com/claims");
+    return this.http.get<any[]>(this.const_api + "/claims");
   }
+  updateClaim(claim:any) {
+  return this.http.put(this.const_api + '/claims/' + claim.id, claim);
+}
+addPolicy(policy:any) {
+  return this.http.post(this.const_api + '/policies', policy);
+}
+
+deletePolicy(id:string) {
+  return this.http.delete(this.const_api + '/policies/' + id);
+}
+getCustomers() {
+  return this.http.get<any[]>(this.const_api + '/customers');
+}
+
 
 }

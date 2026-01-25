@@ -1,0 +1,101 @@
+<div class="p-6">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Policy Management</h1>
+    <p class="text-gray-500">Create and manage insurance policies</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+    <h3 class="font-semibold mb-4">Add New Policy</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <input class="border p-2 rounded"
+             placeholder="Policy ID (POL-001)"
+             [(ngModel)]="policy.id">
+
+      <input class="border p-2 rounded"
+             placeholder="Policy Name"
+             [(ngModel)]="policy.name">
+
+      <input class="border p-2 rounded"
+             placeholder="Type (health / life)"
+             [(ngModel)]="policy.type">
+
+      <input class="border p-2 rounded"
+             type="number"
+             placeholder="Premium"
+             [(ngModel)]="policy.premium">
+
+      <input class="border p-2 rounded"
+             type="number"
+             placeholder="Coverage"
+             [(ngModel)]="policy.coverage">
+
+      <input class="border p-2 rounded"
+             type="number"
+             placeholder="Duration (Years)"
+             [(ngModel)]="policy.duration">
+
+    </div>
+
+    <textarea class="border p-2 rounded w-full mt-4"
+              rows="3"
+              placeholder="Policy Description"
+              [(ngModel)]="policy.description"></textarea>
+
+    <textarea class="border p-2 rounded w-full mt-4"
+              rows="2"
+              placeholder="Features (comma separated)"
+              [(ngModel)]="policy.featuresText"></textarea>
+
+    <button
+      class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded"
+      (click)="addPolicy()">
+      Add Policy
+    </button>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+
+    <table class="w-full text-left">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4">ID</th>
+          <th class="p-4">Name</th>
+          <th class="p-4">Type</th>
+          <th class="p-4">Premium</th>
+          <th class="p-4">Coverage</th>
+          <th class="p-4">Duration</th>
+          <th class="p-4">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(p of policies; track $index) {
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-4 font-medium">{{ p.id }}</td>
+            <td class="p-4">{{ p.name }}</td>
+            <td class="p-4">{{ p.type }}</td>
+            <td class="p-4">₹{{ p.premium }}</td>
+            <td class="p-4">₹{{ p.coverage }}</td>
+            <td class="p-4">{{ p.duration }}</td>
+            <td class="p-4">
+              <button
+                class="px-3 py-1 text-sm bg-red-600 text-white rounded"
+                (click)="deletePolicy(p.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if(policies.length === 0){
+    <div class="p-6 text-center text-gray-500">
+      No policies found
+    </div>
+    }
+  </div>
+
+</div>

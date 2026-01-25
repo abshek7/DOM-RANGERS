@@ -1,0 +1,117 @@
+<div class="flex min-h-screen bg-gray-100">
+
+  <aside class="w-64 bg-white border-r">
+    <div class="p-6 text-xl font-bold text-indigo-600">SecureLife</div>
+
+    <nav class="px-4 space-y-2">
+      <a routerLink="/admin/dashboard"
+         class="block px-4 py-2 rounded bg-indigo-50 text-indigo-600">
+        Dashboard
+      </a>
+      <a routerLink="/admin/customers"
+         class="block px-4 py-2 rounded hover:bg-gray-100">
+        User Management
+      </a>
+      <a routerLink="/admin/policies"
+         class="block px-4 py-2 rounded hover:bg-gray-100">
+        Policies
+      </a>
+      <a routerLink="/admin/claims"
+         class="block px-4 pz-2 rounded hover:bg-gray-100">
+        Analytics
+      </a>
+      <a class="block px-4 py-2 rounded hover:bg-gray-100">
+        Settings
+      </a>
+    </nav>
+  </aside>
+
+  <main class="flex-1 p-6">
+
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+        <p class="text-gray-500">Complete system overview and management</p>
+      </div>
+      <div class="space-x-3">
+        <button class="px-4 py-2 border rounded">Generate Report</button>
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded">
+          System Settings
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <p class="text-gray-500 text-sm">Total Users</p>
+        <h2 class="text-3xl font-semibold">{{ usersCount }}</h2>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <p class="text-gray-500 text-sm">Active Agents</p>
+        <h2 class="text-3xl font-semibold">{{ agentsCount }}</h2>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <p class="text-gray-500 text-sm">Total Policies</p>
+        <h2 class="text-3xl font-semibold">{{ policiesCount }}</h2>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <p class="text-gray-500 text-sm">Pending Claims</p>
+        <h2 class="text-3xl font-semibold text-red-600">
+          {{ pendingClaims }}
+        </h2>
+      </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <h3 class="font-semibold mb-4">Recent Claims Activity</h3>
+
+        <ul class="space-y-3">
+          @for(a of activities; track $index) {
+            <li class="flex justify-between items-center">
+              <span>
+                <strong>{{ a.type }}</strong> – {{ a.description }}
+              </span>
+              <span
+                class="px-3 py-1 text-sm rounded-full"
+                [class.bg-yellow-100]="a.status === 'pending'"
+                [class.text-yellow-700]="a.status === 'pending'"
+                [class.bg-green-100]="a.status === 'approved'"
+                [class.text-green-700]="a.status === 'approved'">
+                {{ a.status }}
+              </span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow-sm">
+        <h3 class="font-semibold mb-4">Policy Distribution</h3>
+
+        @for(p of policyDistribution; track $index) {
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span>{{ p.name }}</span>
+              <span>{{ p.value }}</span>
+            </div>
+
+            <div class="w-full bg-gray-200 h-2 rounded">
+              <div
+                class="h-2 bg-indigo-600 rounded"
+                [style.width.%]="p.percent">
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+  </main>
+
+</div>

@@ -1,12 +1,14 @@
 export interface User {
-  id: number;
-  username: string;
+  id: string;
+  name: string;
   email: string;
   password: string;
-  role: 'admin' | 'customer' | 'agent';
-
-  firstName: string;
-  lastName: string;
-  phone: string;
-  createdAt: string;
+  role: 'Admin' | 'Customer' | 'Agent';
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  createdAt?: string;
+  lastLogin?: string;
 }

@@ -1,0 +1,83 @@
+<div class="policy-details-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading policy details...</p>
+    </div>
+
+    <!-- Policy Details -->
+    <div *ngIf="!loading && policy" class="policy-details">
+        <div class="policy-header">
+            <button class="back-button" routerLink="/customer/marketplace">← Back to Marketplace</button>
+            <div class="header-content">
+                <div class="policy-icon-large">{{ policy.icon }}</div>
+                <div class="header-info">
+                    <span class="policy-type-badge">{{ policy.type }}</span>
+                    <h1>{{ policy.policyName }}</h1>
+                    <p class="policy-description">{{ policy.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="policy-content">
+            <!-- Key Information -->
+            <div class="info-section">
+                <h2>Key Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Premium</span>
+                        <span class="info-value">₹{{ policy.premium | number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Coverage</span>
+                        <span class="info-value">₹{{ policy.coverage | number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">{{ policy.duration }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Age Range</span>
+                        <span class="info-value">{{ policy.minAge }} - {{ policy.maxAge }} years</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="features-section">
+                <h2>Features & Benefits</h2>
+                <div class="features-list">
+                    <div *ngFor="let feature of policy.features" class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span>{{ feature }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating -->
+            <div class="rating-section">
+                <h2>Customer Reviews</h2>
+                <div class="rating-display">
+                    <div class="stars">
+                        <span *ngFor="let star of getStarArray(policy.rating)" class="star">⭐</span>
+                    </div>
+                    <span class="rating-text">{{ policy.rating }} out of 5 ({{ policy.reviewCount }} reviews)</span>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="action-section">
+                <button class="btn-primary" [routerLink]="['/customer/purchase', policy.id]">
+                    Buy This Policy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loading && !policy" class="error-state">
+        <h2>Policy Not Found</h2>
+        <p>The policy you're looking for doesn't exist.</p>
+        <button class="btn-secondary" routerLink="/customer/marketplace">Back to Marketplace</button>
+    </div>
+</div>

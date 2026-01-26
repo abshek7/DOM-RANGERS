@@ -1,0 +1,92 @@
+<div class="file-claim-container">
+    <div class="page-header">
+        <button class="back-button" routerLink="/customer/claims">← Back to Claims</button>
+        <h1>File New Claim</h1>
+        <p>Submit a new insurance claim for review</p>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <div *ngIf="!loading" class="claim-form-container">
+        <form (ngSubmit)="onSubmit()" #claimForm="ngForm">
+            <div class="form-section">
+                <h2>Policy Information</h2>
+
+                <div class="form-group">
+                    <label for="policyId">Select Policy *</label>
+                    <select id="policyId" name="policyId" [(ngModel)]="formData.policyId" required>
+                        <option value="">Choose a policy</option>
+                        <option *ngFor="let policy of customerPolicies" [value]="policy.policyId">
+                            {{ policy.policyName }} - {{ policy.policyId }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="claimType">Claim Type *</label>
+                    <select id="claimType" name="claimType" [(ngModel)]="formData.claimType" required>
+                        <option *ngFor="let type of claimTypes" [value]="type">
+                            {{ type | titlecase }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Claim Details</h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="incidentDate">Incident Date *</label>
+                        <input type="date" id="incidentDate" name="incidentDate" [(ngModel)]="formData.incidentDate"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="claimAmount">Claim Amount (₹) *</label>
+                        <input type="number" id="claimAmount" name="claimAmount" [(ngModel)]="formData.claimAmount"
+                            required min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" [(ngModel)]="formData.description" rows="4"
+                        placeholder="Describe the incident and reason for claim..." required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Contact & Banking Information</h2>
+
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" [(ngModel)]="formData.contactNumber"
+                        placeholder="Your contact number">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bankAccount">Bank Account Number</label>
+                        <input type="text" id="bankAccount" name="bankAccount" [(ngModel)]="formData.bankAccount"
+                            placeholder="Account number for claim settlement">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ifscCode">IFSC Code</label>
+                        <input type="text" id="ifscCode" name="ifscCode" [(ngModel)]="formData.ifscCode"
+                            placeholder="Bank IFSC code">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" routerLink="/customer/claims">Cancel</button>
+                <button type="submit" class="btn-primary">Submit Claim</button>
+            </div>
+        </form>
+    </div>
+</div>

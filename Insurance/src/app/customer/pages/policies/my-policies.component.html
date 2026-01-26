@@ -1,0 +1,79 @@
+<div class="my-policies-container">
+    <div class="page-header">
+        <h1>My Policies</h1>
+        <p>Manage and view all your active insurance policies</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your policies...</p>
+    </div>
+
+    <!-- Policies List -->
+    <div *ngIf="!loading" class="policies-list">
+        <div *ngFor="let policy of myPolicies" class="policy-item">
+            <div class="policy-main">
+                <div class="policy-icon-wrapper">
+                    <div class="policy-icon">{{ policy.policyDetails?.icon }}</div>
+                </div>
+
+                <div class="policy-info">
+                    <div class="policy-header-row">
+                        <h3>{{ policy.policyDetails?.policyName }}</h3>
+                        <span class="status-badge" [ngClass]="getStatusClass(policy.status)">
+                            {{ policy.status }}
+                        </span>
+                    </div>
+
+                    <div class="policy-meta">
+                        <span class="policy-number">Policy #{{ policy.policyNumber }}</span>
+                        <span class="policy-type">{{ policy.policyDetails?.type }}</span>
+                    </div>
+
+                    <div class="policy-details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Coverage</span>
+                            <span class="detail-value">₹{{ policy.policyDetails?.coverage | number }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Premium</span>
+                            <span class="detail-value">₹{{ policy.premiumPaid | number }}/year</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Valid Until</span>
+                            <span class="detail-value">{{ policy.endDate | date: 'MMM dd, yyyy' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Next Premium</span>
+                            <span class="detail-value">{{ policy.nextPremiumDate | date: 'MMM dd, yyyy' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="renewal-alert" *ngIf="getDaysUntilRenewal(policy.renewalDate) <= 30">
+                        <span class="alert-icon">⚠️</span>
+                        <span>Renewal due in {{ getDaysUntilRenewal(policy.renewalDate) }} days</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="policy-actions">
+                <button class="btn-action" [routerLink]="['/customer/policy-details', policy.policyDetails?.id]">
+                    View Details
+                </button>
+                <button class="btn-action" (click)="downloadPolicy(policy)">Download Policy</button>
+                <button class="btn-action" routerLink="/customer/file-claim">File Claim</button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="myPolicies.length === 0" class="empty-state">
+            <span class="empty-icon">📄</span>
+            <h3>No Active Policies</h3>
+            <p>You don't have any active insurance policies yet</p>
+            <button class="btn-primary" routerLink="/customer/marketplace">
+                Browse Policies
+            </button>
+        </div>
+    </div>
+</div>

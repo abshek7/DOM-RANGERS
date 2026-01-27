@@ -1,0 +1,30 @@
+<h2 class="text-xl font-bold mb-6">Claims</h2>
+
+@if (claimsService.claims().length === 0) {
+<p class="text-gray-500">No claims assigned.</p>
+} @for (claim of claimsService.claims(); track claim.id) {
+<div class="bg-white p-4 mb-3 rounded shadow flex justify-between items-center">
+  <div>
+    <p class="font-semibold">
+      {{ claim.description }}
+    </p>
+
+    <p class="text-sm text-gray-500">Amount: ₹{{ claim.amount }}</p>
+
+    <p class="text-sm text-gray-500">Type: {{ claim.type }}</p>
+
+    <p class="text-sm text-gray-500">Date: {{ claim.date }}</p>
+
+    <span
+      class="text-xs px-2 py-1 rounded capitalize"
+      [class.bg-yellow-200]="claim.status === 'pending'"
+      [class.bg-green-200]="claim.status === 'approved'"
+      [class.bg-red-200]="claim.status === 'rejected'"
+    >
+      {{ claim.status }}
+    </span>
+  </div>
+
+  <a [routerLink]="['claims', claim.id]" class="text-blue-600 font-semibold"> View </a>
+</div>
+}

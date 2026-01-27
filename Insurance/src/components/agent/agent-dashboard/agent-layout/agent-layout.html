@@ -1,0 +1,122 @@
+<div class="flex min-h-screen bg-slate-100">
+  <aside
+    class="fixed inset-y-0 left-0 z-40 w-72 bg-gradient-to-b from-blue-900 to-blue-800 text-white flex flex-col shadow-xl transform transition-transform duration-300 lg:translate-x-0"
+  >
+    <div class="px-5 py-6 border-b border-white/10">
+      <div class="flex items-center gap-3 text-xl font-bold">
+        <lucide-icon [name]="Shield" class="w-7 h-7" />
+        <span>InsuranceHub</span>
+      </div>
+    </div>
+
+    <div class="m-4 p-4 rounded-xl bg-white/5 flex items-center gap-3">
+      <div
+        class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-semibold"
+      >
+        A
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold">Agent User</h3>
+        <p class="text-xs opacity-80">AGT-001</p>
+      </div>
+    </div>
+    <nav class="flex-1 px-4">
+      <p class="text-[11px] font-semibold tracking-widest opacity-60 mb-3 ml-3">MAIN MENU</p>
+
+      <ul class="space-y-1">
+        <li routerLinkActive="active">
+          <a
+            routerLink="agent-dashboard"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/15 hover:translate-x-1 transition-all"
+            routerLinkActive="bg-white/20 font-semibold"
+          >
+            <lucide-icon [name]="LayoutDashboard" class="w-5 h-5" />
+            Dashboard
+          </a>
+        </li>
+
+        <li routerLinkActive="active">
+          <a
+            routerLink="agent-customers"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/15 hover:translate-x-1 transition-all"
+            routerLinkActive="bg-white/20 font-semibold"
+          >
+            <lucide-icon [name]="Users" class="w-5 h-5" />
+            Customers
+          </a>
+        </li>
+
+        <li routerLinkActive="active">
+          <a
+            routerLink="agent-policies"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/15 hover:translate-x-1 transition-all"
+            routerLinkActive="bg-white/20 font-semibold"
+          >
+            <lucide-icon [name]="FileText" class="w-5 h-5" />
+            Policies
+          </a>
+        </li>
+
+        <li routerLinkActive="active">
+          <a
+            routerLink="agent-claims"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/15 hover:translate-x-1 transition-all"
+            routerLinkActive="bg-white/20 font-semibold"
+          >
+            <lucide-icon [name]="Receipt" class="w-5 h-5" />
+            Claims
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-white/10">
+      <p class="text-[11px] font-semibold tracking-widest opacity-60 mb-3 ml-3">TOOLS</p>
+
+      <ul class="space-y-1">
+        <li>
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/15 transition">
+            <lucide-icon [name]="Settings" class="w-5 h-5" />
+            Settings
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-200 hover:bg-white/15 transition"
+          >
+            <lucide-icon [name]="LogOut" class="w-5 h-5" />
+            Sign Out
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="flex-1 lg:ml-72 flex flex-col min-h-screen">
+    <header class="bg-white px-6 lg:px-8 py-5 flex items-center justify-between shadow-sm">
+      <div>
+        <h1 class="text-xl font-bold text-slate-800">Agent Portal</h1>
+        <p class="text-sm text-slate-500">Manage your customers, commissions</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button
+          class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+        >
+          + New Client
+        </button>
+
+        <div
+          class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-800 text-white font-semibold flex items-center justify-center"
+        >
+          A
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

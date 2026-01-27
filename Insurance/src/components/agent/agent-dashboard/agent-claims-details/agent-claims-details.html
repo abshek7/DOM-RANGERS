@@ -1,0 +1,35 @@
+@if (claim(); as c) {
+
+<div class="bg-white p-6 rounded shadow max-w-xl">
+  <h2 class="text-xl font-bold mb-2">Claim ID: {{ c.id }}</h2>
+
+  <p class="mb-2"><strong>Type:</strong> {{ c.type }}</p>
+
+  <p class="mb-2"><strong>Amount:</strong> ₹{{ c.amount }}</p>
+
+  <p class="mb-4"><strong>Status:</strong> {{ c.status }}</p>
+
+  <p class="mb-4"><strong>Description:</strong> {{ c.description }}</p>
+
+  <div class="flex gap-3">
+    <button
+      class="bg-green-600 text-white px-4 py-2 rounded"
+      (click)="update('approved')"
+      [disabled]="c.status === 'approved'"
+    >
+      Approve
+    </button>
+
+    <button
+      class="bg-red-600 text-white px-4 py-2 rounded"
+      (click)="update('rejected')"
+      [disabled]="c.status === 'rejected'"
+    >
+      Reject
+    </button>
+  </div>
+</div>
+
+} @else {
+<p>Loading claim details...</p>
+}

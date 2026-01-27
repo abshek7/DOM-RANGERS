@@ -1,0 +1,103 @@
+<h2 class="text-2xl font-bold mb-6 text-gray-800">Policies</h2>
+
+<div class="relative max-w-sm mb-6">
+  <select
+    class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    (change)="onSelectPolicy($any($event.target).value)"
+  >
+    <option value="all">All Policies</option>
+
+    @for (policy of policiesService.policies(); track policy.id) {
+    <option [value]="policy.id">
+      {{ policy.name }}
+    </option>
+    }
+  </select>
+
+  <lucide-icon
+    [name]="ChevronDown"
+    class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+  />
+</div>
+
+@if (policiesService.isLoading()) {
+<div class="flex items-center gap-2 text-gray-500">
+  <lucide-icon [name]="Clock" class="w-4 h-4" />
+  Loading policies...
+</div>
+} @if (!policiesService.isLoading() && displayedPolicies.length === 0) {
+<p class="text-gray-500">No policies available.</p>
+} @for (policy of displayedPolicies; track policy.id) {
+<div
+  class="bg-white rounded-2xl border p-6 mb-5 transition duration-200"
+  [ngClass]="{
+    'border-indigo-500 ring-2 ring-indigo-100': selectedPolicy?.id === policy.id,
+    'border-gray-200 hover:shadow-lg': selectedPolicy?.id !== policy.id
+  }"
+>
+  <div class="flex items-start justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <lucide-icon [name]="FileText" class="w-5 h-5 text-indigo-600" />
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ policy.name }}
+      </h3>
+    </div>
+
+    <span class="text-xs px-3 py-1 rounded-full capitalize bg-blue-100 text-blue-700">
+      {{ policy.type }}
+    </span>
+  </div>
+
+  <p class="text-sm text-gray-600 mb-4">
+    {{ policy.description }}
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm mb-5">
+    <div class="flex items-center gap-2">
+      <lucide-icon [name]="IndianRupee" class="w-4 h-4 text-gray-400" />
+      <div>
+        <p class="text-gray-500">Premium</p>
+        <p class="font-semibold">₹{{ policy.premium }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <lucide-icon [name]="Shield" class="w-4 h-4 text-gray-400" />
+      <div>
+        <p class="text-gray-500">Coverage</p>
+        <p class="font-semibold">₹{{ policy.coverage }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <lucide-icon [name]="Clock" class="w-4 h-4 text-gray-400" />
+      <div>
+        <p class="text-gray-500">Duration</p>
+        <p class="font-semibold">{{ policy.duration }} year(s)</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <lucide-icon [name]="Calendar" class="w-4 h-4 text-gray-400" />
+      <div>
+        <p class="text-gray-500">Created</p>
+        <p class="font-semibold">
+          {{ policy.createdAt | date : 'mediumDate' }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="text-sm font-semibold mb-2 text-gray-800">Features</p>
+    <ul class="space-y-1">
+      @for (feature of policy.features; track feature) {
+      <li class="flex items-center gap-2 text-sm text-gray-700">
+        <lucide-icon [name]="CheckCircle" class="w-4 h-4 text-green-500" />
+        {{ feature }}
+      </li>
+      }
+    </ul>
+  </div>
+</div>
+}

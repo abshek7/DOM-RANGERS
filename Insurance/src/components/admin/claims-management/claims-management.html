@@ -1,0 +1,92 @@
+<div class="p-6">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Claims Management</h1>
+    <p class="text-gray-500">Review and process insurance claims</p>
+  </div>
+
+  <div class="flex gap-3 mb-6">
+    <button class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-300" (click)="filter='all'">All</button>
+    <button class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-300" (click)="filter='pending'">Pending</button>
+    <button class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-300" (click)="filter='approved'">Approved</button>
+    <button class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-300" (click)="filter='rejected'">Rejected</button>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+
+    <table class="w-full text-left">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4">Claim ID</th>
+          <th class="p-4">Customer</th>
+          <th class="p-4">Policy</th>
+          <th class="p-4">Amount</th>
+          <th class="p-4">Status</th>
+          <th class="p-4 text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(c of filteredClaims(); track $index) {
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-4 font-medium">{{ c.id }}</td>
+            <td class="p-4">{{ c.customerId }}</td>
+            <td class="p-4">{{ c.policyId }}</td>
+            <td class="p-4">₹{{ c.amount }}</td>
+            <td class="p-4 capitalize">{{ c.status }}</td>
+            <td class="p-4 text-center">
+              <button
+                class="px-3 py-1 bg-indigo-600 text-white rounded"
+                (click)="openClaim(c)">
+                View
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+@if (showModal) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-xl">
+
+      <h3 class="text-lg font-semibold mb-4">Claim Details</h3>
+
+      <div class="space-y-2 text-sm">
+        <p><strong>Claim ID:</strong> {{ selectedClaim.id }}</p>
+        <p><strong>Customer:</strong> {{ selectedClaim.customerId }}</p>
+        <p><strong>Policy:</strong> {{ selectedClaim.policyId }}</p>
+        <p><strong>Amount:</strong> ₹{{ selectedClaim.amount }}</p>
+        <p><strong>Assigned Agent:</strong>
+          {{ assignedAgent?.id || 'Not Assigned' }}
+        </p>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm mb-1">Admin Remark</label>
+        <textarea class="border p-2 rounded w-full"
+                  rows="3"
+                  [(ngModel)]="selectedClaim.remark"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button class="px-4 py-2 border rounded"
+                (click)="closeModal()">Close</button>
+
+        <button class="px-4 py-2 bg-red-600 text-white rounded"
+                (click)="updateStatus('rejected')">
+          Reject
+        </button>
+
+        <button class="px-4 py-2 bg-green-600 text-white rounded"
+                (click)="updateStatus('approved')">
+          Approve
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

@@ -1,0 +1,96 @@
+<div class="p-6">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Agent Management</h1>
+    <p class="text-gray-500">Assign customers and manage commissions</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+
+    <table class="w-full text-left">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4">Agent ID</th>
+          <th class="p-4">Commission</th>
+          <th class="p-4">Customers</th>
+          <th class="p-4 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(a of agents; track $index) {
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-4 font-medium">{{ a.id }}</td>
+            <td class="p-4">{{ a.commissionRate }}%</td>
+            <td class="p-4">
+              {{ customersOfAgent(a.id).length }}
+            </td>
+            <td class="p-4 text-center space-x-2">
+              <button
+                class="px-3 py-1 bg-indigo-600 text-white rounded"
+                (click)="openAssign(a)">
+                Assign Customers
+              </button>
+              <button
+                class="px-3 py-1 bg-gray-700 text-white rounded"
+                (click)="openCommission(a)">
+                Edit Commission
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+@if (showAssignModal) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-lg">
+
+      <h3 class="text-lg font-semibold mb-4">Assign Customers</h3>
+
+      <div class="max-h-64 overflow-y-auto space-y-2">
+        @for(c of customers; track $index) {
+          <label class="flex items-center gap-2">
+            <input type="checkbox"
+                   [checked]="selectedCustomerIds.includes(c.id)"
+                   (change)="toggleCustomer(c.id)">
+            <span>{{ c.id }}</span>
+          </label>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button class="px-4 py-2 border rounded"
+                (click)="closeAssign()">Cancel</button>
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded"
+                (click)="saveAssignments()">Save</button>
+      </div>
+
+    </div>
+  </div>
+}
+@if (showCommissionModal) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-sm">
+
+      <h3 class="text-lg font-semibold mb-4">Edit Commission</h3>
+
+      <input class="border p-2 rounded w-full"
+             type="number"
+             [(ngModel)]="commissionRate"
+             placeholder="Commission %">
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button class="px-4 py-2 border rounded"
+                (click)="closeCommission()">Cancel</button>
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded"
+                (click)="saveCommission()">Save</button>
+      </div>
+
+    </div>
+  </div>
+}

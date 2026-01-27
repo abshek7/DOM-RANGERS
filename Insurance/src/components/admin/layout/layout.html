@@ -1,0 +1,41 @@
+<div class="flex min-h-screen bg-gray-100">
+  <aside class="w-64 bg-white border-r">
+    <div class="p-6 text-xl font-bold text-indigo-600">
+              Hartford
+            </div>
+    <nav class="px-4 space-y-2">
+      <a routerLink="dashboard"
+   routerLinkActive="bg-indigo-50 text-indigo-600"
+   class="block px-4 py-2 rounded">
+  Dashboard
+</a>
+<a routerLink="agents"
+   routerLinkActive="bg-indigo-50 text-indigo-600"
+   class="block px-4 py-2 rounded">
+  Agent Management
+</a>
+
+<a routerLink="policies"
+   routerLinkActive="bg-indigo-50 text-indigo-600"
+   class="block px-4 py-2 rounded">
+  Policies
+</a>
+
+<a routerLink="claims"
+   routerLinkActive="bg-indigo-50 text-indigo-600"
+   class="block px-4 py-2 rounded">
+   Claims
+</a>
+
+<a routerLink="customers"
+   routerLinkActive="bg-indigo-50 text-indigo-600"
+   class="block px-4 py-2 rounded">
+        Customers
+      </a>
+
+    </nav>
+  </aside>
+  <main class="flex-1 p-6">
+    <router-outlet/>
+  </main>
+</div>

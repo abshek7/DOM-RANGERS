@@ -1,0 +1,68 @@
+@if (claim(); as c) {
+<div class="bg-white p-6 rounded shadow max-w-xl">
+  <h2 class="text-xl font-bold mb-4">Claim ID: {{ c.id }}</h2>
+
+  <p class="mb-2">
+    <strong>Type:</strong>
+    {{ c.type | titlecase }}
+  </p>
+
+  <p class="mb-2">
+    <strong>Amount:</strong>
+    {{ c.amount | currency : 'INR' : 'symbol' : '1.0-0' }}
+  </p>
+
+  <p class="mb-3 flex items-center gap-2">
+    <strong>Status:</strong>
+
+    @if (c.status === 'approved') {
+    <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">
+      {{ c.status | titlecase }}
+    </span>
+    } @else if (c.status === 'rejected') {
+    <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-700">
+      {{ c.status | titlecase }}
+    </span>
+    } @else {
+    <span class="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">
+      {{ c.status | titlecase }}
+    </span>
+    }
+  </p>
+
+  <p class="mb-4">
+    <strong>Description:</strong>
+    {{ c.description }}
+  </p>
+
+  <div class="flex gap-3 mb-6">
+    <button
+      class="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+      (click)="update('approved')"
+      [disabled]="c.status === 'approved'"
+    >
+      Approve
+    </button>
+
+    <button
+      class="bg-red-600 text-white px-4 py-2 rounded disabled:opacity-50"
+      (click)="update('rejected')"
+      [disabled]="c.status === 'rejected'"
+    >
+      Reject
+    </button>
+
+    <button
+      class="bg-yellow-500 text-white px-4 py-2 rounded disabled:opacity-50"
+      (click)="update('pending')"
+      [disabled]="c.status === 'pending'"
+    >
+      Pending
+    </button>
+  </div>
+
+  <button class="text-sm text-blue-600 hover:underline" (click)="goBack()"> Back to Claims</button>
+</div>
+} @else {
+<p class="text-gray-500">Loading claim details...</p>
+}

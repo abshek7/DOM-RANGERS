@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { PoliciesService } from '../../../../services/policiesService';
 import { Policies } from '../../../../models/policies';
 
@@ -13,11 +12,12 @@ import {
   CheckCircle,
   ChevronDown,
 } from 'lucide-angular';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'agent-policies',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [LucideAngularModule, DatePipe, CurrencyPipe],
   templateUrl: './agent-policies.html',
 })
 export class AgentPolicies implements OnInit {
@@ -37,7 +37,6 @@ export class AgentPolicies implements OnInit {
 
   ngOnInit(): void {
     this.policiesService.loadPolicies();
-
     this.displayedPolicies = this.policiesService.policies();
   }
 
@@ -52,5 +51,11 @@ export class AgentPolicies implements OnInit {
 
     this.selectedPolicy = policy;
     this.displayedPolicies = policy ? [policy] : [];
+  }
+
+  policyCardClass(policy: Policies): string {
+    return this.selectedPolicy?.id === policy.id
+      ? 'border-indigo-500 ring-2 ring-indigo-100'
+      : 'border-gray-200 hover:shadow-lg';
   }
 }

@@ -15,15 +15,15 @@ export class PoliciesService {
     this.loadingSignal.set(true);
 
     this.http.get<Policies[]>(`${API_URL}/policies`).subscribe({
-      next: res => {
+      next: (res) => {
         this.policiesSignal.set(res);
         this.loadingSignal.set(false);
       },
-      error: err => {
+      error: (err) => {
         console.error('Failed to load policies', err);
         this.policiesSignal.set([]);
         this.loadingSignal.set(false);
-      }
+      },
     });
   }
 

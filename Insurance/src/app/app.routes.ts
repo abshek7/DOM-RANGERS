@@ -4,41 +4,49 @@ import { AgentDashboard } from '../components/agent/agent-dashboard/agent-dashbo
 import { AgentClaims } from '../components/agent/agent-dashboard/agent-claims/agent-claims';
 import { AgentClaimsDetails } from '../components/agent/agent-dashboard/agent-claims-details/agent-claims-details';
 import { AgentCustomers } from '../components/agent/agent-dashboard/agent-customers/agent-customers';
+import { AgentCustomerDetails } from '../components/agent/agent-dashboard/agent-customers-details/agent-customer-details';
 import { AgentPolicies } from '../components/agent/agent-dashboard/agent-policies/agent-policies';
 
 export const agentRoutes: Routes = [
   { path: '', redirectTo: 'agent', pathMatch: 'full' },
+
   {
     path: 'agent',
     component: AgentLayout,
-    children:  [
+    children: [
       {
         path: 'agent-dashboard',
-        component: AgentDashboard
+        component: AgentDashboard,
       },
       {
         path: 'agent-claims',
-        component: AgentClaims
+        component: AgentClaims,
       },
       {
-        path: 'agent-claims-details',
-        component: AgentClaimsDetails
+        path: 'agent-claims/:id',
+        component: AgentClaimsDetails,
       },
       {
         path: 'agent-customers',
-        component: AgentCustomers
+        component: AgentCustomers,
+      },
+      {
+        path: 'agent-customers/:id',
+        component: AgentCustomerDetails,
       },
       {
         path: 'agent-policies',
-        component: AgentPolicies
+        component: AgentPolicies,
       },
       {
         path: '',
         redirectTo: 'agent-dashboard',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
-  { path: '**', redirectTo: 'agent/agent-dashboard', pathMatch: 'full' }
+
+  { path: '**', redirectTo: 'agent/agent-dashboard' },
 ];
+
 export const routes: Routes = [...agentRoutes];

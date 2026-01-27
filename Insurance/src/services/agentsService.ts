@@ -10,69 +10,58 @@ export class AgentService {
   private loadingSignal = signal<boolean>(false);
 
   constructor(private http: HttpClient) {}
- 
+
   loadAgent(agentUserId: number): void {
     this.loadingSignal.set(true);
 
     this.http.get<Agent[]>(`${API_URL}/agents`).subscribe({
-      next: agents => {
-        const agent = agents.find(a => a.userId === agentUserId) ?? null;
+      next: (agents) => {
+        const agent = agents.find((a) => a.userId === agentUserId) ?? null;
         this.agentSignal.set(agent);
         this.loadingSignal.set(false);
       },
-      error: err => {
+      error: (err) => {
         console.error('Failed to load agent', err);
         this.agentSignal.set(null);
         this.loadingSignal.set(false);
-      }
+      },
     });
   }
- 
+
   agent = computed(() => this.agentSignal());
   isLoading = computed(() => this.loadingSignal());
 
- 
-  totalSalesAmount = computed(() =>
-    this.agent()?.sales.reduce((sum, s) => sum + s.premium, 0) ?? 0
+  totalSalesAmount = computed(
+    () => this.agent()?.sales.reduce((sum, s) => sum + s.premium, 0) ?? 0
   );
 
-  totalPoliciesSold = computed(() =>
-    this.agent()?.totalPoliciesSold ?? 0
-  );
+  totalPoliciesSold = computed(() => this.agent()?.totalPoliciesSold ?? 0);
 
-  recentSales = computed(() =>
-    this.agent()?.sales.slice(-5) ?? []
-  );
+  recentSales = computed(() => this.agent()?.sales.slice(-5) ?? []);
 
   /* ---------------- COMMISSIONS ---------------- */
-  pendingCommission = computed(() =>
-    this.agent()?.commissions
-      .filter(c => c.status === 'pending')
-      .reduce((sum, c) => sum + c.amount, 0) ?? 0
+  pendingCommission = computed(
+    () =>
+      this.agent()
+        ?.commissions.filter((c) => c.status === 'pending')
+        .reduce((sum, c) => sum + c.amount, 0) ?? 0
   );
 
-  earnedCommission = computed(() =>
-    this.agent()?.commissions
-      .filter(c => c.status === 'earned')
-      .reduce((sum, c) => sum + c.amount, 0) ?? 0
+  earnedCommission = computed(
+    () =>
+      this.agent()
+        ?.commissions.filter((c) => c.status === 'earned')
+        .reduce((sum, c) => sum + c.amount, 0) ?? 0
   );
 
   /* ---------------- CUSTOMERS ---------------- */
-  assignedCustomersCount = computed(() =>
-    this.agent()?.assignedCustomers.length ?? 0
-  );
+  assignedCustomersCount = computed(() => this.agent()?.assignedCustomers.length ?? 0);
 
   /* ---------------- COMMUNICATION ---------------- */
-  recentCommunications = computed(() =>
-    this.agent()?.communicationLogs.slice(-5) ?? []
-  );
+  recentCommunications = computed(() => this.agent()?.communicationLogs.slice(-5) ?? []);
 
   /* ---------------- PROFILE ---------------- */
-  licenseNumber = computed(() =>
-    this.agent()?.licenseNumber ?? 'N/A'
-  );
+  licenseNumber = computed(() => this.agent()?.licenseNumber ?? 'N/A');
 
-  commissionRate = computed(() =>
-    this.agent()?.commissionRate ?? 0
-  );
+  commissionRate = computed(() => this.agent()?.commissionRate ?? 0);
 }

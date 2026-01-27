@@ -30,10 +30,7 @@
 } @for (policy of displayedPolicies; track policy.id) {
 <div
   class="bg-white rounded-2xl border p-6 mb-5 transition duration-200"
-  [ngClass]="{
-    'border-indigo-500 ring-2 ring-indigo-100': selectedPolicy?.id === policy.id,
-    'border-gray-200 hover:shadow-lg': selectedPolicy?.id !== policy.id
-  }"
+  [class]="policyCardClass(policy)"
 >
   <div class="flex items-start justify-between mb-3">
     <div class="flex items-center gap-2">
@@ -57,7 +54,9 @@
       <lucide-icon [name]="IndianRupee" class="w-4 h-4 text-gray-400" />
       <div>
         <p class="text-gray-500">Premium</p>
-        <p class="font-semibold">₹{{ policy.premium }}</p>
+        <p class="font-semibold">
+          {{ policy.premium | currency : 'INR' : 'symbol' : '1.0-0' }}
+        </p>
       </div>
     </div>
 
@@ -65,7 +64,9 @@
       <lucide-icon [name]="Shield" class="w-4 h-4 text-gray-400" />
       <div>
         <p class="text-gray-500">Coverage</p>
-        <p class="font-semibold">₹{{ policy.coverage }}</p>
+        <p class="font-semibold">
+          {{ policy.coverage | currency : 'INR' : 'symbol' : '1.0-0' }}
+        </p>
       </div>
     </div>
 

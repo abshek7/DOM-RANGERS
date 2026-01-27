@@ -13,24 +13,34 @@ export interface CustomerWithUser {
 
 @Injectable({ providedIn: 'root' })
 export class CustomersService {
-
   customers = signal<CustomerWithUser[]>([]);
   isLoading = signal(false);
 
   constructor(private http: HttpClient) {}
+
+  getCustomerById(id: string) {
+    return this.customers().find((c) => c.customer.id === id)?.customer;
+  }
+
+  loadCustomerById(id: string) {
+    this.http.get<Customer>(`${API_URL}/customers/${id}`).subscribe((customer) => {
+      this.customers.update((list) =>
+        list.map((item) => (item.customer.id === id ? { ...item, customer } : item))
+      );
+    });
+  }
 
   loadCustomers() {
     this.isLoading.set(true);
 
     forkJoin({
       customers: this.http.get<Customer[]>(`${API_URL}/customers`),
-      users: this.http.get<User[]>(`${API_URL}/users`)
+      users: this.http.get<User[]>(`${API_URL}/users`),
     }).subscribe({
       next: ({ customers, users }) => {
-
-        const merged = customers.map(customer => ({
+        const merged = customers.map((customer) => ({
           customer,
-          user: users.find(u => u.id === customer.userId)
+          user: users.find((u) => u.id === customer.userId),
         }));
 
         this.customers.set(merged);
@@ -39,7 +49,7 @@ export class CustomersService {
       error: () => {
         this.customers.set([]);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 }

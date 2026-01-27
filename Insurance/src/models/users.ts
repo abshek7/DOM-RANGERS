@@ -1,11 +1,18 @@
+export type UserRole = 'admin' | 'customer' | 'agent';
+
 export interface User {
   id: number;
   username: string;
   email: string;
   password: string;
-  role: 'admin' | 'customer' | 'agent';
+  role: UserRole;
   firstName: string;
   lastName: string;
   phone: string;
   createdAt: string;
+}
+
+export interface AuthSession {
+  user: User;
+  token: string;
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -9,20 +9,14 @@ import { AuthService } from '../../../core/services/auth.service';
   imports: [CommonModule, RouterModule],
   template: `
   <header class="sticky top-0 z-50">
-    <!-- Top colorful bar -->
-    <div class="h-1 w-full bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-emerald-500"></div>
-
-    <!-- Main nav -->
-    <div class="border-b bg-white/70 backdrop-blur-xl">
-      <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4">
-
-        <!-- Left: Logo -->
-        <a routerLink="/" class="group flex items-center gap-2">
+    
+    <div class="border-b bg-white backdrop-blur-xl">
+      <div class="mx-auto bg-white flex h-16 max-w-8xl items-center gap-3">
+        <a routerLink="/" class="group flex items-center gap-2 px-2">
           <div
             class="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-600 via-fuchsia-600 to-emerald-500 text-white font-extrabold shadow-lg shadow-indigo-500/20 ring-1 ring-white/60">
             H
           </div>
-
           <div class="leading-tight">
             <div class="text-sm font-extrabold text-slate-900 tracking-wide group-hover:text-indigo-700 transition">
               Hartford
@@ -188,8 +182,8 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class NavbarComponent {
   private auth = inject(AuthService);
+  router = inject(Router)
   open = signal(false);
-
   user = signal(this.auth.user);
   dashboardLink = computed(() => {
     const role = this.auth.role;
@@ -204,6 +198,7 @@ export class NavbarComponent {
   }
 
   logout() {
+    this.router.navigateByUrl('');
     this.auth.logout();
     this.open.set(false);
   }

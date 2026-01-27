@@ -1,8 +1,9 @@
-import {ChangeDetectorRef ,Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/adminservice';
 import { Policies } from '../../../models/policies';
+
 @Component({
   selector: 'app-policy-management',
   standalone: true,
@@ -11,45 +12,55 @@ import { Policies } from '../../../models/policies';
   styleUrl: './policy-management.css'
 })
 export class PolicyManagement implements OnInit {
+  policies: Policies[] = [];
+  customers:any[] = [];
+  agents:any[] = [];
 
-  policies:Policies[] = [];
+  activeTab:'policies' | 'requests' = 'policies';
+
+  showAssignModal = false;
+  selectedApplication:any = null;
+  selectedAgentId:string = '';
+
 
   policy:any = {
-    id: '',
     name: '',
     type: '',
-    premium: 0,
-    coverage: 0,
-    duration: 0,
+    premium: '',
+    coverage: '',
+    duration: '',
     description: '',
     featuresText: ''
   };
 
-  constructor(private adminService: AdminService, private c: ChangeDetectorRef) {}
+  showEditModal = false;
+  selectedPolicy:any = null;
+
+  constructor(private adminService: AdminService,private c:ChangeDetectorRef) {}
 
   ngOnInit() {
     this.loadPolicies();
+    this.loadCustomers();
+    this.loadAgents();
   }
 
   loadPolicies() {
-    this.adminService.getPolicies().subscribe((r:any[]) => {
+    this.adminService.getPolicies().subscribe((r:Policies[]) => {
       this.policies = r;
-      this.c.detectChanges()
+      this.c.detectChanges();
     });
   }
 
   addPolicy() {
     const payload = {
-      id: this.policy.id,
+      id: 'POL-' + ((parseInt(this.policies[this.policies.length - 1]?.id.split('-')[1]) || 999) + 1),
       name: this.policy.name,
       type: this.policy.type,
       premium: Number(this.policy.premium),
       coverage: Number(this.policy.coverage),
       duration: Number(this.policy.duration),
       description: this.policy.description,
-      features: this.policy.featuresText
-        .split(',')
-        .map((f:string) => f.trim()),
+      features: this.policy.featuresText.split(',').map((f:string) => f.trim()),
       createdAt: new Date().toISOString().split('T')[0],
       cancellationRequests: [],
       endorsementRequests: []
@@ -58,28 +69,112 @@ export class PolicyManagement implements OnInit {
     this.adminService.addPolicy(payload).subscribe(() => {
       this.loadPolicies();
       this.resetForm();
-      this.c.detectChanges()
+      this.c.detectChanges();
     });
   }
 
   resetForm() {
     this.policy = {
-      id: '',
       name: '',
       type: '',
-      premium: null,
-      coverage: null,
-      duration: null,
+      premium: '',
+      coverage: '',
+      duration: '',
       description: '',
       featuresText: ''
     };
   }
 
+  openEdit(p:Policies) {
+    this.selectedPolicy = {
+      ...p,
+      featuresText: p.features.join(', ')
+    };
+    this.showEditModal = true;
+  }
+
+  closeEdit() {
+    this.showEditModal = false;
+    this.selectedPolicy = null;
+  }
+
+  updatePolicy() {
+    const payload = {
+      name: this.selectedPolicy.name,
+      type: this.selectedPolicy.type,
+      premium: Number(this.selectedPolicy.premium),
+      coverage: Number(this.selectedPolicy.coverage),
+      duration: Number(this.selectedPolicy.duration),
+      description: this.selectedPolicy.description,
+      features: this.selectedPolicy.featuresText.split(',').map((f:string) => f.trim())
+    };
+
+    this.adminService.updatePolicy(this.selectedPolicy.id, payload).subscribe(() => {
+      this.loadPolicies();
+      this.closeEdit();
+      this.c.detectChanges();
+    });
+  }
+
   deletePolicy(id:string) {
     this.adminService.deletePolicy(id).subscribe(() => {
       this.loadPolicies();
-      this.c.detectChanges()
+      this.c.detectChanges();
     });
+  }
+
+  loadCustomers() {
+    this.adminService.getCustomers().subscribe((r:any[]) => {
+      this.customers = r;
+      this.c.detectChanges();
+    });
+  }
+  loadAgents() {
+    this.adminService.getAgents().subscribe((r:any[]) => {
+      this.agents = r;
+      this.c.detectChanges();
+    });
+  }
+
+  policyApplications() {
+    return this.customers.flatMap(c =>
+      (c.policies || []).map((p:any) => ({
+        customerId: c.id,
+        policyId: p.policyId,
+        status: p.status,
+        assignedAgentId: p.assignedAgentId
+      }))
+    );
+  }
+
+  openAssign(app:any) {
+    this.selectedApplication = app;
+    this.selectedAgentId = app.assignedAgentId || '';
+    this.showAssignModal = true;
+  }
+
+  closeAssign() {
+    this.showAssignModal = false;
+    this.selectedApplication = null;
+    this.selectedAgentId = '';
+  }
+
+  assignAgent() {
+    const customer = this.customers.find(c => c.id === this.selectedApplication.customerId);
+
+    const updatedApplications = customer.policies.map((p:any) =>
+      p.policyId === this.selectedApplication.policyId
+        ? { ...p, assignedAgentId: this.selectedAgentId, status: 'Assigned' }
+        : p
+    );
+
+    this.adminService.updateCustomer(customer.id, {
+      policies: updatedApplications
+    }).subscribe(() => {
+      this.loadCustomers();
+      this.closeAssign();
+    });
+    this.c.detectChanges();
   }
 
 }

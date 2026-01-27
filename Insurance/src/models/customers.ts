@@ -6,7 +6,6 @@ export interface Customer {
   dateOfBirth: string;
   aadharNumber: string;
   panNumber: string;
-
   assignedAgent: {
     agentId: string;
     name: string;
@@ -35,6 +34,5 @@ export interface Customer {
     }[];
   }[];
 
-  claims: string[]; // claimIds
+  claims: string[];
 }
-

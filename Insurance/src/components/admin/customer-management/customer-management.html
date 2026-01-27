@@ -2,7 +2,7 @@
 
   <div class="mb-6">
     <h1 class="text-2xl font-bold">Customer Management</h1>
-    <p class="text-gray-500">View registered customers and policy details</p>
+    <p class="text-gray-500">View customers and verify KYC</p>
   </div>
 
   <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
@@ -11,10 +11,9 @@
       <thead class="bg-gray-50 border-b">
         <tr>
           <th class="p-4">Customer ID</th>
-          <th class="p-4">User ID</th>
-          <th class="p-4">Nominee</th>
+          <th class="p-4">KYC Status</th>
           <th class="p-4">Policies</th>
-          <th class="p-4">Assigned Agent</th>
+          <th class="p-4 text-center">Action</th>
         </tr>
       </thead>
 
@@ -22,23 +21,76 @@
         @for(c of customers; track $index) {
           <tr class="border-b hover:bg-gray-50">
             <td class="p-4 font-medium">{{ c.id }}</td>
-            <td class="p-4">{{ c.userId }}</td>
-            <td class="p-4">{{ c.nominee }}</td>
-            <td class="p-4">
-              {{ c.policies?.length || 0 }}
-            </td>
-            <td class="p-4">
-              {{ c.assignedAgent?.name || '-' }}
+            <td class="p-4">{{ c.kycStatus }}</td>
+            <td class="p-4">{{ c.policies?.length || 0 }}</td>
+            <td class="p-4 text-center">
+              <button
+                class="px-3 py-1 bg-indigo-600 text-white rounded"
+                (click)="openCustomer(c)">
+                View
+              </button>
             </td>
           </tr>
         }
       </tbody>
     </table>
-    @if(customers.length === 0){
-    <div class="p-6 text-center text-gray-500">
-      No customers found
-    </div>
-}
+
   </div>
 
 </div>
+
+@if (showModal) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
+
+      <h3 class="text-lg font-semibold mb-4">Customer Details</h3>
+
+      <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+        <p><strong>ID:</strong> {{ selectedCustomer.id }}</p>
+        <p><strong>KYC:</strong> {{ selectedCustomer.kycStatus }}</p>
+      </div>
+
+      <h4 class="font-semibold mb-2">Policy Applications</h4>
+
+      <div class="border rounded mb-6">
+        @for(p of selectedCustomer.policies || []; track $index) {
+          <div class="flex justify-between p-3 border-b text-sm">
+            <span>{{ p.policyId }}</span>
+            <span>{{ p.status }}</span>
+            <span>{{ agentName(p.assignedAgentId) }}</span>
+          </div>
+        }
+      </div>
+
+      <h4 class="font-semibold mb-2">KYC Documents</h4>
+
+      <div class="border rounded mb-6">
+        @for(d of customerDocuments(); track $index) {
+          <div class="flex justify-between p-3 border-b text-sm">
+            <span>{{ d.type }}</span>
+            <span>{{ d.status }}</span>
+            <a class="text-indigo-600" [href]="d.fileUrl" target="_blank">
+              View
+            </a>
+          </div>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button class="px-4 py-2 border rounded"
+                (click)="closeModal()">Close</button>
+
+        <button class="px-4 py-2 bg-red-600 text-white rounded"
+                (click)="updateKyc('Rejected')">
+          Reject
+        </button>
+
+        <button class="px-4 py-2 bg-green-600 text-white rounded"
+                (click)="updateKyc('Verified')">
+          Verify
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

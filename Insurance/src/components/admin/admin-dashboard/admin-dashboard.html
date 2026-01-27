@@ -16,32 +16,41 @@
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
 
-      <div class="bg-white p-5 rounded-xl shadow-sm">
+      <div class="flex justify-between p-5 rounded-xl shadow-sm">
+        <div>
         <p class="text-gray-500 text-sm">Total Users</p>
         <h2 class="text-3xl font-semibold">{{ usersCount }}</h2>
+        </div>
+        <img src="customer.png" alt="Customers" class="mt-2 w-12 h-12">
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow-sm">
+      <div class="flex justify-between p-5 rounded-xl shadow-sm">
+        <div>
         <p class="text-gray-500 text-sm">Active Agents</p>
         <h2 class="text-3xl font-semibold">{{ agentsCount }}</h2>
+        </div>
+        <img src="support.png" alt="Agents" class="mt-2 w-12 h-12">
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow-sm">
+      <div class="flex justify-between p-5 rounded-xl shadow-sm">
+        <div>
         <p class="text-gray-500 text-sm">Total Policies</p>
         <h2 class="text-3xl font-semibold">{{ policiesCount }}</h2>
+        </div>
+        <img src="policy.png" alt="Policies" class="mt-2 w-12 h-12">
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow-sm">
+      <div class="flex justify-between p-5 rounded-xl shadow-sm">
+        <div>
         <p class="text-gray-500 text-sm">Pending Claims</p>
         <h2 class="text-3xl font-semibold text-red-600">
           {{ pendingClaims }}
         </h2>
+        </div>
+        <img src="claim.png" alt="Claims" class="mt-2 w-12 h-12">
       </div>
-
     </div>
-
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
       <div class="bg-white p-5 rounded-xl shadow-sm">
         <h3 class="font-semibold mb-4">Recent Claims Activity</h3>
 

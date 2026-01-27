@@ -1,5 +1,6 @@
-export interface Claims{
-  id: string; 
+
+export interface Claims {
+  id: string;
   policyId: string;
   customerId: string;
   type: string;
@@ -15,10 +16,6 @@ export interface Claims{
     fileName: string;
     uploadedAt: string;
   }[];
+
   remarks?: string;
-  timeline: {
-    status: string;
-    updatedBy: 'admin' | 'agent';
-    date: string;
-  }[];
 }

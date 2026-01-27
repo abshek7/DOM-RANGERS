@@ -9,4 +9,8 @@ import { FooterComponent } from "./shared/components/footer/footer.component";
   imports: [RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  protected readonly title = signal('Insurance');
+}
+
+

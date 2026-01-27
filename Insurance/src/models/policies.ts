@@ -8,20 +8,6 @@ export interface Policies {
   description: string;
   features: string[];
   createdAt: string;
-
-  cancellationRequests?: {
-    customerId: string;
-    reason: string;
-    status: 'pending' | 'approved' | 'rejected';
-    requestedAt: string;
-  }[];
-
-  endorsementRequests?: {
-    customerId: string;
-    changeRequested: string;
-    status: 'pending' | 'approved' | 'rejected';
-    requestedAt: string;
-  }[];
+  cancellationRequests?:[];
+  endorsementRequests?:[];
 }
-
-

@@ -10,7 +10,7 @@ import { FooterComponent } from "./shared/components/footer/footer.component";
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('Insurance');
+//   protected readonly title = signal('Insurance');
 }
 
 

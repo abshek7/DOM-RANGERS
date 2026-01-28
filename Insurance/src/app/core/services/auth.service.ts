@@ -38,12 +38,6 @@ export class AuthService {
 
   // ---------- Public API ----------
 
-  /**
-   * ✅ UPDATED LOGIN:
-   * - fetch user by email/username ONLY
-   * - hash entered password in frontend
-   * - compare with stored hash in DB
-   */
   login(identifier: string, password: string, rememberMe: boolean): Observable<AuthSession['user']> {
     const isEmail = identifier.includes('@');
 
@@ -59,7 +53,6 @@ export class AuthService {
           switchMap((enteredHash) => {
             const stored = (user as any).password as string | undefined;
 
-            // If old users have plain password stored, support it once and migrate to hash
             const looksHashed = typeof stored === 'string' && /^[a-f0-9]{64}$/i.test(stored);
 
             if (looksHashed) {
@@ -73,7 +66,7 @@ export class AuthService {
             // migrate plaintext -> hash (best-effort)
             if (user?.id != null) {
               return this.http.patch<User>(`${this.baseUrl}/users/${user.id}`, { password: enteredHash }).pipe(
-                catchError(() => of(user)), // ignore migration failure
+                catchError(() => of(user)),
                 map(() => user)
               );
             }
@@ -103,9 +96,13 @@ export class AuthService {
   /**
    * ✅ UPDATED REGISTER:
    * - hash password in frontend
-   * - store ONLY hash in DB (in the same 'password' field)
+   * - POST to /users
+   * - ALSO POST to /agents or /customers (without password)
    */
-  register(payload: Omit<User, 'id' | 'createdAt'> & { role: UserRole }, autoLogin = true): Observable<AuthSession['user']> {
+  register(
+    payload: Omit<User, 'id' | 'createdAt'> & { role: UserRole },
+    autoLogin = true
+  ): Observable<AuthSession['user']> {
     const createdAt = new Date().toISOString().slice(0, 10);
 
     if (payload.role === 'admin') {
@@ -133,6 +130,29 @@ export class AuthService {
           })
         );
       }),
+
+      // 3) also create in /agents or /customers (no password there)
+      switchMap((createdUser) =>
+        this.createRoleProfile(createdUser).pipe(
+          map(() => createdUser),
+          catchError((err) => {
+            // optional rollback: if role insert fails, delete created /users record
+            if (createdUser?.id != null) {
+              return this.http.delete(`${this.baseUrl}/users/${createdUser.id}`).pipe(
+                switchMap(() =>
+                  throwError(() => new Error('Registration failed while creating role profile. Please try again.'))
+                ),
+                catchError(() =>
+                  throwError(() => new Error('User created but role profile failed. Please contact admin.'))
+                )
+              );
+            }
+            return throwError(() => err);
+          })
+        )
+      ),
+
+      // 4) auto-login same as before
       switchMap((createdUser) => {
         const safeUser = this.stripPassword(createdUser);
         if (!autoLogin) return of(safeUser);
@@ -148,6 +168,7 @@ export class AuthService {
         this._user$.next(safeUser);
         return of(safeUser);
       }),
+
       catchError((err) => throwError(() => new Error(this.prettyError(err))))
     );
   }
@@ -169,9 +190,7 @@ export class AuthService {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    // optional "pepper" (still visible in frontend, but avoids plain text)
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
-
     const input = `${password}::${PEPPER}`;
 
     if (!globalThis.crypto?.subtle) {
@@ -248,6 +267,8 @@ export class AuthService {
 
   private prettyError(err: any): string {
     if (err?.message) return err.message;
+    // helpful message for missing routes
+    if (err?.status === 404) return 'API route not found. Ensure /agents and /customers exist in backend.';
     return 'Something went wrong. Please try again.';
   }
 }

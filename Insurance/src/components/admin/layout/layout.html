@@ -1,41 +1,60 @@
-<div class="flex min-h-screen bg-gray-100">
-  <aside class="w-64 bg-white border-r">
-    <div class="p-6 text-xl font-bold text-indigo-600">
-              Hartford
-            </div>
-    <nav class="px-4 space-y-2">
-      <a routerLink="dashboard"
-   routerLinkActive="bg-indigo-50 text-indigo-600"
-   class="block px-4 py-2 rounded">
-  Dashboard
-</a>
-<a routerLink="agents"
-   routerLinkActive="bg-indigo-50 text-indigo-600"
-   class="block px-4 py-2 rounded">
-  Agent Management
-</a>
+<div class="flex min-h-screen bg-slate-100">
 
-<a routerLink="policies"
-   routerLinkActive="bg-indigo-50 text-indigo-600"
-   class="block px-4 py-2 rounded">
-  Policies
-</a>
+  <aside class="w-64 bg-white border-r flex flex-col">
+    <div class="px-6 py-5 text-2xl font-bold text-indigo-600 tracking-wide">
+      Hartford
+    </div>
 
-<a routerLink="claims"
-   routerLinkActive="bg-indigo-50 text-indigo-600"
-   class="block px-4 py-2 rounded">
-   Claims
-</a>
+    <nav class="flex-1 px-4 py-4 space-y-1">
 
-<a routerLink="customers"
-   routerLinkActive="bg-indigo-50 text-indigo-600"
-   class="block px-4 py-2 rounded">
+      <a
+        routerLink="dashboard"
+        routerLinkActive="bg-indigo-50 text-indigo-600"
+        class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828791.png" class="h-5 w-5" />
+        Dashboard
+      </a>
+
+      <a
+        routerLink="agents"
+        routerLinkActive="bg-indigo-50 text-indigo-600"
+        class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" class="h-5 w-5" />
+        Agent Management
+      </a>
+
+      <a
+        routerLink="policies"
+        routerLinkActive="bg-indigo-50 text-indigo-600"
+        class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" class="h-5 w-5" />
+        Policies
+      </a>
+
+      <a
+        routerLink="claims"
+        routerLinkActive="bg-indigo-50 text-indigo-600"
+        class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" class="h-5 w-5" />
+        Claims
+      </a>
+
+      <a
+        routerLink="customers"
+        routerLinkActive="bg-indigo-50 text-indigo-600"
+        class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" class="h-5 w-5" />
         Customers
       </a>
 
     </nav>
+    <div class="px-6 py-4 border-t text-xs text-slate-400">
+      © 2026 Hartford
+    </div>
   </aside>
-  <main class="flex-1 p-6">
-    <router-outlet/>
+
+  <main class="flex-1 overflow-y-auto">
+    <router-outlet />
   </main>
+
 </div>

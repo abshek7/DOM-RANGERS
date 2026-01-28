@@ -1,98 +1,129 @@
+<main class="flex-1 bg-slate-50 p-8">
+  <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+      <p class="mt-1 text-sm text-slate-500">
+        Complete system overview and management
+      </p>
+    </div>
 
-  <main class="flex-1 p-6">
+    <div class="flex gap-3">
+      <button
+        class="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+        Generate Report
+      </button>
+      <button
+        class="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+        System Settings
+      </button>
+    </div>
+  </div>
 
-    <div class="flex justify-between items-center mb-6">
+  <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
       <div>
-        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-        <p class="text-gray-500">Complete system overview and management</p>
+        <p class="text-sm text-slate-500">Total Users</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ usersCount }}
+        </h2>
       </div>
-      <div class="space-x-3">
-        <button class="px-4 py-2 border rounded">Generate Report</button>
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded">
-          System Settings
-        </button>
+      <div class="rounded-xl bg-indigo-50 p-3">
+        <img src="customer.png" class="h-8 w-8" />
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-
-      <div class="flex justify-between p-5 rounded-xl shadow-sm">
-        <div>
-        <p class="text-gray-500 text-sm">Total Users</p>
-        <h2 class="text-3xl font-semibold">{{ usersCount }}</h2>
-        </div>
-        <img src="customer.png" alt="Customers" class="mt-2 w-12 h-12">
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Active Agents</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ agentsCount }}
+        </h2>
       </div>
-
-      <div class="flex justify-between p-5 rounded-xl shadow-sm">
-        <div>
-        <p class="text-gray-500 text-sm">Active Agents</p>
-        <h2 class="text-3xl font-semibold">{{ agentsCount }}</h2>
-        </div>
-        <img src="support.png" alt="Agents" class="mt-2 w-12 h-12">
+      <div class="rounded-xl bg-emerald-50 p-3">
+        <img src="support.png" class="h-8 w-8" />
       </div>
+    </div>
 
-      <div class="flex justify-between p-5 rounded-xl shadow-sm">
-        <div>
-        <p class="text-gray-500 text-sm">Total Policies</p>
-        <h2 class="text-3xl font-semibold">{{ policiesCount }}</h2>
-        </div>
-        <img src="policy.png" alt="Policies" class="mt-2 w-12 h-12">
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Total Policies</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ policiesCount }}
+        </h2>
       </div>
+      <div class="rounded-xl bg-blue-50 p-3">
+        <img src="policy.png" class="h-8 w-8" />
+      </div>
+    </div>
 
-      <div class="flex justify-between p-5 rounded-xl shadow-sm">
-        <div>
-        <p class="text-gray-500 text-sm">Pending Claims</p>
-        <h2 class="text-3xl font-semibold text-red-600">
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Pending Claims</p>
+        <h2 class="mt-1 text-3xl font-bold text-red-600">
           {{ pendingClaims }}
         </h2>
-        </div>
-        <img src="claim.png" alt="Claims" class="mt-2 w-12 h-12">
+      </div>
+      <div class="rounded-xl bg-red-50 p-3">
+        <img src="claim.png" class="h-8 w-8" />
       </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <div class="bg-white p-5 rounded-xl shadow-sm">
-        <h3 class="font-semibold mb-4">Recent Claims Activity</h3>
 
-        <ul class="space-y-3">
-          @for(a of activities; track $index) {
-            <li class="flex justify-between items-center">
-              <span>
-                <strong>{{ a.type }}</strong> – {{ a.description }}
-              </span>
-              <span
-                class="px-3 py-1 text-sm rounded-full"
-                [class.bg-yellow-100]="a.status === 'pending'"
-                [class.text-yellow-700]="a.status === 'pending'"
-                [class.bg-green-100]="a.status === 'approved'"
-                [class.text-green-700]="a.status === 'approved'">
-                {{ a.status }}
-              </span>
-            </li>
-          }
-        </ul>
-      </div>
+  </div>
 
-      <div class="bg-white p-5 rounded-xl shadow-sm">
-        <h3 class="font-semibold mb-4">Policy Distribution</h3>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
 
-        @for(p of policyDistribution; track $index) {
-          <div class="mb-4">
-            <div class="flex justify-between text-sm mb-1">
-              <span>{{ p.name }}</span>
-              <span>{{ p.value }}</span>
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      <h3 class="mb-5 text-lg font-semibold text-slate-900">
+        Recent Claims Activity
+      </h3>
+
+      <ul class="space-y-4">
+        @for(a of activities; track $index) {
+          <li class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-slate-800">
+                {{ a.type }}
+              </p>
+              <p class="text-xs text-slate-500">
+                {{ a.description }}
+              </p>
             </div>
 
-            <div class="w-full bg-gray-200 h-2 rounded">
-              <div
-                class="h-2 bg-indigo-600 rounded"
-                [style.width.%]="p.percent">
-              </div>
+            <span
+              class="rounded-full px-3 py-1 text-xs font-semibold capitalize"
+              [class.bg-yellow-100]="a.status === 'pending'"
+              [class.text-yellow-700]="a.status === 'pending'"
+              [class.bg-green-100]="a.status === 'approved'"
+              [class.text-green-700]="a.status === 'approved'">
+              {{ a.status }}
+            </span>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      <h3 class="mb-5 text-lg font-semibold text-slate-900">
+        Policy Distribution
+      </h3>
+
+      @for(p of policyDistribution; track $index) {
+        <div class="mb-5">
+          <div class="mb-1 flex justify-between text-sm text-slate-600">
+            <span class="font-medium">{{ p.name }}</span>
+            <span>{{ p.value }}</span>
+          </div>
+
+          <div class="h-2 w-full rounded-full bg-slate-200">
+            <div
+              class="h-2 rounded-full bg-indigo-600 transition-all"
+              [style.width.%]="p.percent">
             </div>
           </div>
-        }
-      </div>
-
+        </div>
+      }
     </div>
-  </main>
 
+  </div>
+
+</main>

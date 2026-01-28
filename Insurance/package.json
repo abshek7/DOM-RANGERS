@@ -38,8 +38,19 @@
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
     "@tailwindcss/postcss": "^4.1.18",
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "autoprefixer": "^10.4.23",
+    "jsdom": "^27.1.0",
+    "postcss": "^8.5.6",
+=======
     "jsdom": "^27.1.0",
     "postcss": "^8.5.3",
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
+=======
+    "jsdom": "^27.1.0",
+    "postcss": "^8.5.3",
+>>>>>>> c7add7c1c8a5ab56c95ab1869a7c5d5e8a40a7c8
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

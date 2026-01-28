@@ -119,13 +119,33 @@ export class AuthService {
       switchMap(({ byEmail, byUsername }) => {
         if (byEmail?.length) return throwError(() => new Error('Email already exists.'));
         if (byUsername?.length) return throwError(() => new Error('Username already exists.'));
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        // 1) hash before storing in /users
+=======
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
+=======
+>>>>>>> c7add7c1c8a5ab56c95ab1869a7c5d5e8a40a7c8
         return from(this.hashPassword((payload as any).password)).pipe(
           switchMap((passwordHash) => {
             const newUser: User = {
               ...payload,
               createdAt,
+<<<<<<< HEAD
+<<<<<<< HEAD
+              password: passwordHash, // ✅ hashed stored in users
+            } as User;
+
+            // 2) create in /users
+=======
               password: passwordHash,
             } as User;
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
+=======
+              password: passwordHash,
+            } as User;
+>>>>>>> c7add7c1c8a5ab56c95ab1869a7c5d5e8a40a7c8
             return this.http.post<User>(`${this.baseUrl}/users`, newUser);
           })
         );
@@ -189,6 +209,32 @@ export class AuthService {
     return Math.floor(Date.now() / 1000) < exp;
   }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+  // ---------- NEW: create role profile ----------
+  private createRoleProfile(createdUser: User): Observable<any> {
+    const endpoint = createdUser.role === 'agent' ? 'agents' : 'customers';
+
+    const roleDoc = {
+      userId: createdUser.id, // link to users
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
+      username: createdUser.username,
+      email: createdUser.email,
+      phone: createdUser.phone,
+      role: createdUser.role,
+      createdAt: new Date().toISOString(),
+      status: 'active',
+    };
+
+    return this.http.post(`${this.baseUrl}/${endpoint}`, roleDoc);
+  }
+
+  // ---------- Password Hashing (Frontend) ----------
+=======
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
+=======
+>>>>>>> c7add7c1c8a5ab56c95ab1869a7c5d5e8a40a7c8
   private async hashPassword(password: string): Promise<string> {
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
     const input = `${password}::${PEPPER}`;

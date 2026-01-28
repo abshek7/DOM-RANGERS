@@ -10,7 +10,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phone: string;
-  createdAt: string; // YYYY-MM-DD
+  createdAt: string; 
 }
 
 export interface AuthSession {

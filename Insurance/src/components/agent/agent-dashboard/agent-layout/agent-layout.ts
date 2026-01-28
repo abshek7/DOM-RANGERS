@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal ,inject} from '@angular/core';
+import {ChangeDetectorRef, Component, signal ,inject} from '@angular/core';
 import {Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../app/core/services/auth.service';
+import { AdminService } from '../../../../services/adminservice';
+import { Agent } from '../../../../models';
 import {
   LucideAngularModule,
   Shield,
@@ -28,9 +30,18 @@ export class AgentLayout {
   readonly Receipt = Receipt;
   // readonly Settings = Settings;
   readonly LogOut = LogOut;
+  currentAgent :any;
   private auth = inject(AuthService);
+  private adminService = inject(AdminService);
+  private ChangeDetectorRef = inject(ChangeDetectorRef);
   router = inject(Router)
   open = signal(false);
+  ngOnInit(): void {
+   this.adminService.getAgents().subscribe((users:Agent[]) => {
+        this.currentAgent = users.find((u:any) => u.userId==this.auth.user?.id);
+        console.log(this.currentAgent);
+        this.ChangeDetectorRef.detectChanges();
+      });}
   logout() {
     this.router.navigateByUrl('');
     this.auth.logout();

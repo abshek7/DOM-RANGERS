@@ -28,7 +28,7 @@ export class AdminDashboard implements OnInit {
       this.policyDistribution = r.map(p => ({
         name: p.name,
         value: p.coverage,
-        percent: (p.coverage / 1000000) * 100
+        percent: (p.coverage / 1000000) * 10
       }));
       this.c.detectChanges()
     });

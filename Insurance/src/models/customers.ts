@@ -26,6 +26,5 @@ export interface Customer {
       transactionId?: string;
     }[];
   }[];
-
   claims: string[];
 }

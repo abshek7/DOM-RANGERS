@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Customer } from '../models/customers';
 import { User } from '../models/users';
 import { forkJoin } from 'rxjs';
-
-const API_URL = 'https://insurance-1-ylo4.onrender.com';
+import { AdminService } from './adminservice';
+import { AuthService } from '../app/core/services/auth.service';
+const API_URL = 'https://localhost:3000';
 
 export interface CustomerWithUser {
   customer: Customer;
@@ -16,11 +17,18 @@ export class CustomersService {
   customers = signal<CustomerWithUser[]>([]);
   isLoading = signal(false);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private adminService: AdminService, private auth: AuthService) {}
 
   getCustomerById(id: string) {
     return this.customers().find((c) => c.customer.id === id)?.customer;
   }
+  getCustomerByUserId(userId: number) {
+  return this.http.get<any[]>(`${API_URL}/customers?userId=${userId}`);
+}
+
+updateCustomer(customerId: string, payload: any) {
+  return this.http.patch(`${API_URL}/customers/${customerId}`, payload);
+}
 
   loadCustomerById(id: string) {
     this.http.get<Customer>(`${API_URL}/customers/${id}`).subscribe((customer) => {
@@ -31,25 +39,37 @@ export class CustomersService {
   }
 
   loadCustomers() {
-    this.isLoading.set(true);
+  this.isLoading.set(true);
 
-    forkJoin({
-      customers: this.http.get<Customer[]>(`${API_URL}/customers`),
-      users: this.http.get<User[]>(`${API_URL}/users`),
-    }).subscribe({
-      next: ({ customers, users }) => {
-        const merged = customers.map((customer) => ({
-          customer,
-          user: users.find((u) => u.id === customer.userId),
-        }));
+  forkJoin({
+    customers: this.adminService.getCustomers(),
+    users: this.adminService.getUsers(),
+    agents: this.adminService.getAgents(),
+  }).subscribe({
+    next: ({ customers, users, agents }) => {
+      const agent = agents.find(a => a.userId === this.auth.user?.id);
+      const agentId = agent?.id;
 
-        this.customers.set(merged);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.customers.set([]);
-        this.isLoading.set(false);
-      },
-    });
-  }
+      const filteredCustomers = agentId
+        ? customers.filter((customer: any) =>
+            customer.policies?.some(
+              (policy:any) => policy.assignedAgentId === agentId
+            )
+          )
+        : [];
+
+      const merged = filteredCustomers.map(customer => ({
+        customer,
+        user: users.find(u => u.id === customer.userId),
+      }));
+
+      this.customers.set(merged);
+      this.isLoading.set(false);
+    },
+    error: () => {
+      this.customers.set([]);
+      this.isLoading.set(false);
+    },
+  });
+}
 }

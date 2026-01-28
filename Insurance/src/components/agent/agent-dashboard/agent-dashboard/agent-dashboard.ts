@@ -43,9 +43,9 @@ export class AgentDashboard implements OnInit {
   private loadCurrentAgent(): void {
     this.http.get<User[]>(`${API_URL}/users`).subscribe((users) => {
       const agentUser = users.find((u) => u.role === 'agent' && u.id === this.authService.user?.id);
-      if (agentUser) {
-        this.agentService.loadAgent(agentUser.id);
-      }
+      // if (agentUser) {
+      //   this.agentService.loadAgent(agentUser.id);
+      // }
     });
   }
 }

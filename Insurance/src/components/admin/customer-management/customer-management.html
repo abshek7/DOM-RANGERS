@@ -1,0 +1,119 @@
+<div class="p-8 bg-slate-50 min-h-screen">
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-900">Customer Management</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      View customers, policy activity, and verify KYC
+    </p>
+  </div>
+
+  <div class="rounded-2xl bg-white shadow-sm border overflow-x-auto">
+
+    <table class="w-full text-left">
+      <thead class="bg-slate-50 border-b">
+        <tr>
+          <th class="px-6 py-4 text-sm font-semibold text-slate-600">Customer ID</th>
+          <th class="px-6 py-4 text-sm font-semibold text-slate-600">KYC Status</th>
+          <th class="px-6 py-4 text-sm font-semibold text-slate-600">Policies</th>
+          <th class="px-6 py-4 text-sm font-semibold text-slate-600 text-center">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(c of customers; track $index) {
+          <tr class="border-b hover:bg-slate-50 transition">
+            <td class="px-6 py-4 font-medium text-slate-900">{{ c.id }}</td>
+            <td class="px-6 py-4">
+              <span
+                class="rounded-full px-3 py-1 text-xs font-semibold"
+                [class.bg-yellow-100]="c.kycStatus === 'Pending'"
+                [class.text-yellow-700]="c.kycStatus === 'Pending'"
+                [class.bg-green-100]="c.kycStatus === 'Verified'"
+                [class.text-green-700]="c.kycStatus === 'Verified'"
+                [class.bg-red-100]="c.kycStatus === 'Rejected'"
+                [class.text-red-700]="c.kycStatus === 'Rejected'">
+                {{ c.kycStatus }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-slate-700">
+              {{ c.policies?.length || 0 }}
+            </td>
+            <td class="px-6 py-4 text-center">
+              <button
+                class="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white hover:bg-indigo-500"
+                (click)="openCustomer(c)">
+                View
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+@if (showModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div class="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-lg">
+
+      <h3 class="mb-4 text-lg font-semibold text-slate-900">Customer Details</h3>
+
+      <div class="mb-6 grid grid-cols-2 gap-4 text-sm text-slate-700">
+        <p><strong>Customer ID:</strong> {{ selectedCustomer.id }}</p>
+        <p><strong>KYC Status:</strong> {{ selectedCustomer.kycStatus }}</p>
+      </div>
+
+      <h4 class="mb-2 text-sm font-semibold text-slate-900">Policy Applications</h4>
+
+      <div class="mb-6 rounded-xl border overflow-hidden">
+        @for(p of selectedCustomer.policies || []; track $index) {
+          <div class="flex justify-between items-center px-4 py-3 border-b text-sm text-slate-700">
+            <span class="font-medium">{{ p.policyId }}</span>
+            <span class="capitalize">{{ p.status }}</span>
+            <span class="text-slate-500">{{ agentName(p.assignedAgentId) }}</span>
+          </div>
+        }
+      </div>
+
+      <h4 class="mb-2 text-sm font-semibold text-slate-900">KYC Documents</h4>
+
+      <div class="mb-6 rounded-xl border overflow-hidden">
+        @for(d of customerDocuments(); track $index) {
+          <div class="flex justify-between items-center px-4 py-3 border-b text-sm text-slate-700">
+            <span>{{ d.type }}</span>
+            <span class="capitalize">{{ d.status }}</span>
+            <a
+              class="text-indigo-600 font-semibold hover:underline"
+              [href]="d.fileUrl"
+              target="_blank">
+              View
+            </a>
+          </div>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button
+          class="rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+          (click)="closeModal()">
+          Close
+        </button>
+
+        <button
+          class="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500"
+          (click)="updateKyc('Rejected')">
+          Reject
+        </button>
+
+        <button
+          class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+          (click)="updateKyc('Verified')">
+          Verify
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

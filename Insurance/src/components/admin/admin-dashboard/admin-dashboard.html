@@ -1,0 +1,129 @@
+<main class="flex-1 bg-slate-50 p-8">
+  <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+      <p class="mt-1 text-sm text-slate-500">
+        Complete system overview and management
+      </p>
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        class="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+        Generate Report
+      </button>
+      <button
+        class="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+        System Settings
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Total Users</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ usersCount }}
+        </h2>
+      </div>
+      <div class="rounded-xl bg-indigo-50 p-3">
+        <img src="customer.png" class="h-8 w-8" />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Active Agents</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ agentsCount }}
+        </h2>
+      </div>
+      <div class="rounded-xl bg-emerald-50 p-3">
+        <img src="support.png" class="h-8 w-8" />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Total Policies</p>
+        <h2 class="mt-1 text-3xl font-bold text-slate-900">
+          {{ policiesCount }}
+        </h2>
+      </div>
+      <div class="rounded-xl bg-blue-50 p-3">
+        <img src="policy.png" class="h-8 w-8" />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm">
+      <div>
+        <p class="text-sm text-slate-500">Pending Claims</p>
+        <h2 class="mt-1 text-3xl font-bold text-red-600">
+          {{ pendingClaims }}
+        </h2>
+      </div>
+      <div class="rounded-xl bg-red-50 p-3">
+        <img src="claim.png" class="h-8 w-8" />
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      <h3 class="mb-5 text-lg font-semibold text-slate-900">
+        Recent Claims Activity
+      </h3>
+
+      <ul class="space-y-4">
+        @for(a of activities; track $index) {
+          <li class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-slate-800">
+                {{ a.type }}
+              </p>
+              <p class="text-xs text-slate-500">
+                {{ a.description }}
+              </p>
+            </div>
+
+            <span
+              class="rounded-full px-3 py-1 text-xs font-semibold capitalize"
+              [class.bg-yellow-100]="a.status === 'pending'"
+              [class.text-yellow-700]="a.status === 'pending'"
+              [class.bg-green-100]="a.status === 'approved'"
+              [class.text-green-700]="a.status === 'approved'">
+              {{ a.status }}
+            </span>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      <h3 class="mb-5 text-lg font-semibold text-slate-900">
+        Policy Distribution
+      </h3>
+
+      @for(p of policyDistribution; track $index) {
+        <div class="mb-5">
+          <div class="mb-1 flex justify-between text-sm text-slate-600">
+            <span class="font-medium">{{ p.name }}</span>
+            <span>{{ p.value }}</span>
+          </div>
+
+          <div class="h-2 w-full rounded-full bg-slate-200">
+            <div
+              class="h-2 rounded-full bg-indigo-600 transition-all"
+              [style.width.%]="p.percent">
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+
+</main>

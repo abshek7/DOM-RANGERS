@@ -1,0 +1,40 @@
+<h2 class="text-xl font-bold mb-6">Claims</h2>
+
+@if (claimsService.claims().length === 0) {
+<p class="text-gray-500 italic">No claims assigned.</p>
+} @for (claim of claimsService.claims(); track claim.id) {
+<div
+  class="bg-white p-4 mb-3 rounded-lg shadow-sm flex justify-between items-start hover:shadow transition"
+>
+  <div class="space-y-1">
+    <p class="font-semibold text-gray-800">
+      {{ claim.description | titlecase }}
+    </p>
+
+    <p class="text-sm text-gray-500">
+      Amount:
+      <span class="font-medium text-gray-700">
+        {{ claim.amount | currency : 'INR' : 'symbol' : '1.0-0' }}
+      </span>
+    </p>
+
+    <p class="text-sm text-gray-500">Type: {{ claim.type | titlecase }}</p>
+
+    <p class="text-sm text-gray-500">Date: {{ claim.date | date : 'mediumDate' }}</p>
+
+    <span
+      class="text-xs font-semibold px-2 py-1 rounded capitalize"
+      [class]="claim.status | claimStatusClass"
+    >
+      {{ claim.status | titlecase }}
+    </span>
+  </div>
+
+  <a
+    [routerLink]="['/agent/agent-claims', claim.id]"
+    class="text-blue-600 font-semibold hover:underline"
+  >
+    View
+  </a>
+</div>
+}

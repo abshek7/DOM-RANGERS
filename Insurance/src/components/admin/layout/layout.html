@@ -1,0 +1,82 @@
+<div class="flex min-h-screen bg-slate-100">
+
+  <aside class="w-72 bg-gradient-to-b from-indigo-700 to-blue-700 text-white flex flex-col">
+
+    <div class="px-6 py-6 flex items-center gap-3 border-b border-white/10">
+      <div class="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold">
+        A
+      </div>
+      <div>
+        <p class="font-semibold">Admin User</p>
+        <p class="text-xs text-white/70">ADM-001</p>
+      </div>
+    </div>
+
+    <div class="px-6 py-4 text-xs tracking-widest text-white/60">
+      MAIN MENU
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1">
+
+      <a
+        routerLink="dashboard"
+        routerLinkActive="bg-white/15"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828791.png" class="h-5 w-5" />
+        Dashboard
+      </a>
+
+      <a
+        routerLink="agents"
+        routerLinkActive="bg-white/15"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" class="h-5 w-5" />
+        Agents
+      </a>
+
+      <a
+        routerLink="customers"
+        routerLinkActive="bg-white/15"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" class="h-5 w-5" />
+        Customers
+      </a>
+
+      <a
+        routerLink="policies"
+        routerLinkActive="bg-white/15"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" class="h-5 w-5" />
+        Policies
+      </a>
+
+      <a
+        routerLink="claims"
+        routerLinkActive="bg-white/15"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" class="h-5 w-5" />
+        Claims
+      </a>
+
+    </nav>
+
+    <div class="px-6 py-4 text-xs tracking-widest text-white/60 border-t border-white/10">
+      TOOLS
+    </div>
+
+    <div class="px-4 pb-6">
+      <button
+        (click)="logout()"
+        class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-white/10 transition">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" class="h-5 w-5" />
+        Sign Out
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="flex-1 overflow-y-auto">
+    <router-outlet />
+  </main>
+
+</div>

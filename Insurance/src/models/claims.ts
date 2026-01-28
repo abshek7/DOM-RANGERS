@@ -1,4 +1,5 @@
-export interface Claim {
+
+export interface Claims {
   id: string;
   policyId: string;
   customerId: string;
@@ -11,6 +12,10 @@ export interface Claim {
     agentId: string;
     name: string;
   };
+  documents: {
+    fileName: string;
+    uploadedAt: string;
+  }[];
 
   remarks?: string;
 }

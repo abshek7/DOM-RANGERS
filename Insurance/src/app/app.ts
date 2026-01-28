@@ -1,11 +1,16 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import { FooterComponent } from "./shared/components/footer/footer.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html'
+  standalone: true,
+  imports: [RouterOutlet,  FooterComponent],
+  templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('Insurance');
+//   protected readonly title = signal('Insurance');
 }
+
+

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, switchMap } from 'rxjs';
 import { User } from '../models/users';
-import { Policy } from '../models/policies';
-import { Claim } from '../models/claims';
+import { Policies} from '../models/policies';
+import { Claims } from '../models/claims';
 import { DashboardStats } from '../models/dashboard';
 import { Customer } from '../models/customers';
 
@@ -45,21 +45,21 @@ export class CustomerService {
     return this.http.patch<User>(`${this.apiUrl}/users/${id}`, data);
   }
 
-  getPolicies(): Observable<Policy[]> {
-    return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
+  getPolicies(): Observable<Policies[]> {
+    return this.http.get<Policies[]>(`${this.apiUrl}/policies`);
   }
 
-  getClaims(): Observable<Claim[]> {
-    return this.http.get<Claim[]>(`${this.apiUrl}/claims`);
+  getClaims(): Observable<Claims[]> {
+    return this.http.get<Claims[]>(`${this.apiUrl}/claims`);
   }
 
   getDashboardStats(customerId: string): Observable<DashboardStats> {
     return this.http.get<Customer>(`${this.apiUrl}/customers/${customerId}`).pipe(
       switchMap((customer: Customer) => {
-        return this.http.get<Claim[]>(`${this.apiUrl}/claims?customerId=${customerId}`).pipe(
-          map((claims: Claim[]) => {
+        return this.http.get<Claims[]>(`${this.apiUrl}/claims?customerId=${customerId}`).pipe(
+          map((claims: Claims[]) => {
             const totalPolicies = customer.policies?.length || 0;
-            const pendingClaimsCount = claims.filter((c: Claim) => c.status === 'pending').length;
+            const pendingClaimsCount = claims.filter((c: Claims) => c.status === 'pending').length;
 
             const recentActivity: any[] = [];
             customer.policies?.slice(-2).forEach((p: any) => {
@@ -73,7 +73,7 @@ export class CustomerService {
               });
             });
 
-            claims.slice(-2).forEach((c: Claim) => {
+            claims.slice(-2).forEach((c: Claims) => {
               recentActivity.push({
                 id: c.id,
                 type: 'claim',
@@ -95,7 +95,7 @@ export class CustomerService {
     );
   }
 
-  calculatePremium(policy: Policy, age: number, duration: number, frequency: string): number {
+  calculatePremium(policy: Policies, age: number, duration: number, frequency: string): number {
     let multiplier = 1.0;
     if (age > 45) multiplier += 0.2;
     if (age > 60) multiplier += 0.3;

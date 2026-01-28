@@ -2,8 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Policy } from '../../../../models/policies';
+import { Policies } from '../../../../models/policies';
 import { PolicyService } from '../../../../services/policyservice';
+import { CustomerService } from '../../../../services/customerservice';
 
 @Component({
     selector: 'app-marketplace',
@@ -12,7 +13,7 @@ import { PolicyService } from '../../../../services/policyservice';
     templateUrl: './marketplace.html'
 })
 export class MarketplaceComponent implements OnInit {
-    policies: Policy[] = [];
+    policies: Policies[] = [];
     filteredPolicies: any[] = [];
     loading: boolean = true;
     searchTerm: string = '';
@@ -23,6 +24,7 @@ export class MarketplaceComponent implements OnInit {
 
     constructor(
         private policyService: PolicyService,
+        private customerService: CustomerService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -32,10 +34,10 @@ export class MarketplaceComponent implements OnInit {
     }
 
     loadCustomerOwnedPolicies(): void {
-        this.policyService.http.get<any[]>('http://localhost:3000/users').subscribe((users: any[]) => {
+        this.customerService.getUsers().subscribe((users: any[]) => {
             const firstCustomer = users.find((u: any) => u.role === 'customer');
-            if (firstCustomer) {
-                this.policyService.http.get<any[]>(`http://localhost:3000/customers?userId=${firstCustomer.id}`).subscribe((customers: any[]) => {
+            if (firstCustomer && firstCustomer.id !== undefined) {
+                this.customerService.getCustomerByUserId(firstCustomer.id).subscribe((customers: any[]) => {
                     if (customers.length > 0) {
                         this.ownedPolicyIds = customers[0].policies?.map((p: any) => p.policyId) || [];
                         this.applyFilters();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, switchMap } from 'rxjs';
-import { Policy } from '../models/policies';
+import { Policies} from '../models/policies';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +11,19 @@ export class PolicyService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPolicies(): Observable<Policy[]> {
-    return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
+  getAllPolicies(): Observable<Policies[]> {
+    return this.http.get<Policies[]>(`${this.apiUrl}/policies`);
   }
 
-  getPolicyById(id: string): Observable<Policy> {
-    return this.http.get<Policy>(`${this.apiUrl}/policies/${id}`);
+  getPolicyById(id: string): Observable<Policies> {
+    return this.http.get<Policies>(`${this.apiUrl}/policies/${id}`);
   }
 
-  getPoliciesByType(type: string): Observable<Policy[]> {
-    return this.http.get<Policy[]>(`${this.apiUrl}/policies?type=${type}`);
+  getPoliciesByType(type: string): Observable<Policies[]> {
+    return this.http.get<Policies[]>(`${this.apiUrl}/policies?type=${type}`);
   }
 
-  filterPolicies(policies: Policy[], filters: any): Policy[] {
+  filterPolicies(policies: Policies[], filters: any): Policies[] {
     return policies.filter(policy => {
       if (filters.type && policy.type !== filters.type) return false;
       if (filters.minPremium && policy.premium < filters.minPremium) return false;
@@ -37,26 +37,26 @@ export class PolicyService {
     });
   }
 
-  submitCancellationRequest(policyId: string, request: any): Observable<Policy> {
+  submitCancellationRequest(policyId: string, request: any): Observable<Policies> {
     return this.getPolicyById(policyId).pipe(
       switchMap(policy => {
         const requests: any[] = policy.cancellationRequests || [];
         // @ts-ignore
         requests.push(request);
-        return this.http.patch<Policy>(`${this.apiUrl}/policies/${policyId}`, {
+        return this.http.patch<Policies>(`${this.apiUrl}/policies/${policyId}`, {
           cancellationRequests: requests
         });
       })
     );
   }
 
-  submitEndorsementRequest(policyId: string, request: any): Observable<Policy> {
+  submitEndorsementRequest(policyId: string, request: any): Observable<Policies> {
     return this.getPolicyById(policyId).pipe(
       switchMap(policy => {
         const requests: any[] = policy.endorsementRequests || [];
         // @ts-ignore
         requests.push(request);
-        return this.http.patch<Policy>(`${this.apiUrl}/policies/${policyId}`, {
+        return this.http.patch<Policies>(`${this.apiUrl}/policies/${policyId}`, {
           endorsementRequests: requests
         });
       })

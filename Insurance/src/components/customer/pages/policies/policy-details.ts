@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Policy } from '../../../../models/policies';
+import { Policies } from '../../../../models/policies';
 import { PolicyService } from '../../../../services/policyservice';
 
 @Component({
@@ -11,7 +11,7 @@ import { PolicyService } from '../../../../services/policyservice';
     templateUrl: './policy-details.html'
 })
 export class PolicyDetailsComponent implements OnInit {
-    policy: Policy | null = null;
+    policy: Policies | null = null;
     loading: boolean = true;
     policyId: string = '';
 
@@ -30,8 +30,8 @@ export class PolicyDetailsComponent implements OnInit {
     loadPolicyDetails(): void {
         this.loading = true;
         this.policyService.getPolicyById(this.policyId).subscribe({
-            next: (policy) => {
-                this.policy = policy;
+            next: (policies) => {
+                this.policy = policies;
                 this.loading = false;
             },
             error: (error) => {

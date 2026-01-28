@@ -4,3 +4,4 @@ export * from './policies';
 export * from './claims';
 export * from './dashboard';
 export * from './payments';
+export * from './agents';

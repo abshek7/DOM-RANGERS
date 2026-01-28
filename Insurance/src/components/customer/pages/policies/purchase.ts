@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Policy } from '../../../../models/policies';
+import { Policies } from '../../../../models/policies';
 import { PolicyService } from '../../../../services/policyservice';
 import { CustomerService } from '../../../../services/customerservice';
 
@@ -13,7 +13,7 @@ import { CustomerService } from '../../../../services/customerservice';
     templateUrl: './purchase.html'
 })
 export class PurchaseComponent implements OnInit {
-    policy: Policy | null = null;
+    policy: Policies | null = null;
     loading: boolean = false;
     policyId: string = '';
     customerId: string = '';
@@ -29,7 +29,7 @@ export class PurchaseComponent implements OnInit {
         private policyService: PolicyService,
         private customerService: CustomerService
     ) {
-       
+
         const navigation = this.router.getCurrentNavigation();
         if (navigation?.extras.state && navigation.extras.state['policy']) {
             this.policy = navigation.extras.state['policy'];
@@ -40,7 +40,7 @@ export class PurchaseComponent implements OnInit {
     ngOnInit(): void {
         this.policyId = this.route.snapshot.paramMap.get('id') || '';
 
-      
+
         if (!this.policy && this.policyId) {
             this.loadPolicyDetails();
         } else if (!this.policy && !this.policyId) {
@@ -54,15 +54,15 @@ export class PurchaseComponent implements OnInit {
 
         this.customerService.getUsers().subscribe({
             next: (users) => {
-                const firstCustomer = users.find(u => u.role === 'customer');
-                if (firstCustomer) {
+                const firstCustomer = users.find(u => u.role === 'customer' && u.id !== undefined);
+                if (firstCustomer && firstCustomer.id !== undefined) {
                     this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
                         next: (customers) => {
                             if (customers.length > 0) {
                                 const customer = customers[0];
                                 this.customerId = customer.id;
 
-                           
+
                                 const existingPolicy = customer.policies?.find((p: any) => p.policyId === this.policyId);
                                 if (existingPolicy) {
                                     this.isAlreadyOwned = true;
@@ -113,7 +113,7 @@ export class PurchaseComponent implements OnInit {
 
         this.loading = true;
         this.customerService.getCustomerById(this.customerId).subscribe(customer => {
-    
+
             if (customer.policies?.some((p: any) => p.policyId === this.policyId)) {
                 alert('Policy already owned');
                 this.loading = false;

@@ -36,7 +36,7 @@ export class MyPoliciesComponent implements OnInit {
         this.customerService.getUsers().subscribe({
             next: (users) => {
                 const firstCustomer = users.find(u => u.role === 'customer');
-                if (firstCustomer) {
+                if (firstCustomer && firstCustomer.id !== undefined) {
                     this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
                         next: (customers) => {
                             if (customers.length > 0) this.customer = customers[0];

@@ -1,4 +1,4 @@
-export interface Policy {
+export interface Policies{
   id: string;
   name: string;
   type: 'health' | 'life' | 'vehicle' | 'travel';

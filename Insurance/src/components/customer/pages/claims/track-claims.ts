@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Claim } from '../../../../models/claims';
+import { Claims } from '../../../../models/claims';
 import { ClaimService } from '../../../../services/claimservice';
 import { CustomerService } from '../../../../services/customerservice';
 
@@ -13,7 +13,7 @@ import { CustomerService } from '../../../../services/customerservice';
     templateUrl: './track-claims.html'
 })
 export class TrackClaimsComponent implements OnInit {
-    claims: Claim[] = [];
+    claims: Claims[] = [];
     loading: boolean = true;
     selectedFilter: string = 'all';
     statusOptions = ['all', 'pending', 'approved', 'rejected'];
@@ -33,7 +33,7 @@ export class TrackClaimsComponent implements OnInit {
         this.customerService.getUsers().subscribe({
             next: (users) => {
                 const firstCustomer = users.find(u => u.role === 'customer');
-                if (firstCustomer) {
+                if (firstCustomer && firstCustomer.id !== undefined) {
                     this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
                         next: (customers) => {
                             if (customers.length > 0) {
@@ -67,7 +67,7 @@ export class TrackClaimsComponent implements OnInit {
         });
     }
 
-    get filteredClaims(): Claim[] {
+    get filteredClaims(): Claims[] {
         if (this.selectedFilter === 'all') return this.claims;
         return this.claims.filter(c => c.status.toLowerCase() === this.selectedFilter.toLowerCase());
     }

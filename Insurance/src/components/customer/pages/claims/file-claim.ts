@@ -42,7 +42,7 @@ export class FileClaimComponent implements OnInit {
         this.customerService.getUsers().subscribe({
             next: (users) => {
                 const firstCustomer = users.find(u => u.role === 'customer');
-                if (firstCustomer) {
+                if (firstCustomer && firstCustomer.id !== undefined) {
                     this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
                         next: (customers) => {
                             if (customers.length > 0) {
@@ -96,9 +96,9 @@ export class FileClaimComponent implements OnInit {
             status: 'pending',
             documents: this.selectedFiles,
             assignedAgent: {
-agentId: this.customer.assignedAgent.agentId,
-name: this.customer.assignedAgent.name
-},
+                agentId: this.customer.assignedAgent.agentId,
+                name: this.customer.assignedAgent.name
+            },
         };
 
         this.claimService.fileClaim(newClaim).subscribe({

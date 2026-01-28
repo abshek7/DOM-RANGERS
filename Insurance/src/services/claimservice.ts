@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Claim } from '../models/claims';
+import { Claims } from '../models/claims';
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +11,24 @@ export class ClaimService {
 
   constructor(private http: HttpClient) { }
 
-  getClaimsByCustomer(customerId: string): Observable<Claim[]> {
-    return this.http.get<Claim[]>(`${this.apiUrl}/claims?customerId=${customerId}`);
+  getClaimsByCustomer(customerId: string): Observable<Claims[]> {
+    return this.http.get<Claims[]>(`${this.apiUrl}/claims?customerId=${customerId}`);
   }
 
-  getClaimById(id: string): Observable<Claim> {
-    return this.http.get<Claim>(`${this.apiUrl}/claims/${id}`);
+  getClaimById(id: string): Observable<Claims> {
+    return this.http.get<Claims>(`${this.apiUrl}/claims/${id}`);
   }
 
-  fileClaim(claim: Omit<Claim, 'id'>): Observable<Claim> {
-    return this.http.post<Claim>(`${this.apiUrl}/claims`, {
+  fileClaim(claim: Omit<Claims, 'id'>): Observable<Claims> {
+    return this.http.post<Claims>(`${this.apiUrl}/claims`, {
       ...claim,
       date: new Date().toISOString().split('T')[0],
       status: 'pending'
     });
   }
 
-  updateClaimStatus(id: string, status: 'pending' | 'approved' | 'rejected', remarks?: string): Observable<Claim> {
-    return this.http.patch<Claim>(`${this.apiUrl}/claims/${id}`, { status, remarks });
+  updateClaimStatus(id: string, status: 'pending' | 'approved' | 'rejected', remarks?: string): Observable<Claims> {
+    return this.http.patch<Claims>(`${this.apiUrl}/claims/${id}`, { status, remarks });
   }
 
   getStatusColor(status: string): string {

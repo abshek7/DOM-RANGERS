@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { customerRoutes } from './customer/customer.routes';
+import { customerRoutes } from '../components/customer/customer.routes';
 
 export const routes: Routes = [
   {

@@ -1,12 +1,11 @@
 export interface Customer {
-  id: string; 
+  id: string;
   userId: number;
   nominee: string;
   address: string;
   dateOfBirth: string;
   aadharNumber: string;
   panNumber: string;
-
   assignedAgent: {
     agentId: string;
     name: string;
@@ -26,15 +25,7 @@ export interface Customer {
       status: 'paid' | 'pending' | 'failed';
       transactionId?: string;
     }[];
-
-    documents: {
-      type: string;
-      fileName: string;
-      uploadedAt: string;
-      verified: boolean;
-    }[];
   }[];
 
-  claims: string[]; // claimIds
+  claims: string[];
 }
-

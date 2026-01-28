@@ -1,43 +1,13 @@
 export interface Policy {
   id: string;
-  policyName: string;
-  type: string;
+  name: string;
+  type: 'health' | 'life' | 'vehicle' | 'travel';
   premium: number;
   coverage: number;
-  duration: string;
+  duration: number;
   description: string;
   features: string[];
-  minAge: number;
-  maxAge: number;
-  icon: string;
-  rating: number;
-  reviewCount: number;
-  createdAt?: string;
+  createdAt: string;
+  cancellationRequests?:[];
+  endorsementRequests?:[];
 }
-
-export interface CustomerPolicy {
-  id: string;
-  customerId: string;
-  policyId: string;
-  policyNumber: string;
-  startDate: string;
-  endDate: string;
-  renewalDate: string;
-  paymentStatus: string;
-  status: string;
-  premiumPaid: number;
-  nextPremiumDue: number;
-  nextPremiumDate: string;
-}
-
-export interface PolicyFilter {
-  type?: string;
-  minPremium?: number;
-  maxPremium?: number;
-  minCoverage?: number;
-  maxCoverage?: number;
-  rating?: number;
-  searchTerm?: string;
-}
-
-

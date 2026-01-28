@@ -1,13 +1,12 @@
 export interface DashboardStats {
-  activePolicies: number;
+  totalPolicies: number;
   pendingClaims: number;
-  totalDues: number;
   recentActivity: ActivityItem[];
 }
 
 export interface ActivityItem {
   id: string;
-  type: 'policy' | 'claim' | 'payment';
+  type: 'policy' | 'claim';
   title: string;
   description: string;
   date: string;

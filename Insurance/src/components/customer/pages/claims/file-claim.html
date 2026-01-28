@@ -1,0 +1,88 @@
+<div class="max-w-4xl mx-auto py-8 animate-fadeIn pb-20">
+    <div class="mb-10">
+        <h1 class="text-3xl font-black text-slate-800 tracking-tight">File a Claim</h1>
+        <p class="text-slate-500 font-medium mt-1">Submit an incident report for administrative review.</p>
+    </div>
+
+    <div *ngIf="loading" class="space-y-6 animate-pulse">
+        <div class="h-64 bg-white rounded-3xl border border-slate-100"></div>
+    </div>
+
+    <div *ngIf="!loading && customer" class="bg-white rounded-[2.5rem] border border-slate-200 p-8 md:p-12 shadow-sm">
+        <form (ngSubmit)="onSubmit()" #claimForm="ngForm" class="space-y-8">
+            <div class="space-y-2">
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Select Policy</label>
+                <select name="policyId" [(ngModel)]="formData.policyId" required
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none cursor-pointer">
+                    <option value="" disabled>Choose the policy relevant to this claim</option>
+                    <option *ngFor="let p of activePolicies" [value]="p.policyId">
+                        {{ p.policyName }} ({{ p.policyId }})
+                    </option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Incident
+                        Category</label>
+                    <select name="type" [(ngModel)]="formData.type" required
+                        class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none cursor-pointer">
+                        <option *ngFor="let type of claimTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Estimated
+                        Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                        <input type="number" name="amount" [(ngModel)]="formData.amount" required min="1"
+                            class="w-full pl-10 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none"
+                            placeholder="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Incident Date</label>
+                <input type="date" name="date" [(ngModel)]="formData.date" required
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none">
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Supporting
+                    Documents</label>
+                <div class="relative group">
+                    <input type="file" (change)="onFileSelected($event)" multiple
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                    <div
+                        class="w-full px-6 py-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center gap-2 group-hover:border-blue-400 transition-colors">
+                        <p class="text-sm font-bold text-slate-600">Click to upload or drag and drop</p>
+                        <p class="text-xs text-slate-400">PDF, JPG, PNG up to 10MB</p>
+                    </div>
+                </div>
+                <div *ngIf="selectedFiles.length > 0" class="mt-4 flex flex-wrap gap-2">
+                    <div *ngFor="let file of selectedFiles"
+                        class="px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100">
+                        {{ file }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Incident
+                    Description</label>
+                <textarea name="description" [(ngModel)]="formData.description" rows="4"
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none"
+                    placeholder="Describe clearly what happened..."></textarea>
+            </div>
+
+            <div class="pt-10 flex border-t border-slate-50 gap-4">
+                <button type="submit" [disabled]="!formData.policyId || !formData.amount"
+                    class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all duration-300 shadow-xl shadow-blue-100 disabled:opacity-50">
+                    Submit Insurance Claim
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

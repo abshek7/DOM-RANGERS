@@ -16,21 +16,17 @@ export class AgentCustomerDetails implements OnInit {
   customer = computed<Customer | undefined>(() =>
     this.customersService.getCustomerById(this.customerId)
   );
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private customersService: CustomersService
   ) {}
-
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;
-
     this.customerId = id;
     this.customersService.loadCustomerById(id);
   }
-
   goBack(): void {
     this.router.navigate(['/agent/agent-customers']);
   }

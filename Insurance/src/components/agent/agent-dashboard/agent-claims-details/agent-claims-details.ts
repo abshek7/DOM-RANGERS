@@ -35,7 +35,6 @@ export class AgentClaimsDetails implements OnInit {
 
     this.claimsService.updateStatus(current.id, status).subscribe();
   }
-
   goBack(): void {
     this.router.navigate(['/agent/agent-claims']);
   }

@@ -21,8 +21,6 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent) },
   { path: 'unauthorized', loadComponent: () => import('./pages/auth/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
-
-  // Guarded role dashboards (placeholders)
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard],
@@ -47,7 +45,6 @@ export const routes: Routes = [
     path: 'agent',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['agent'] },
-    path: 'agent',
     component: AgentLayout,
     children: [
       { path: 'agent-dashboard', component: AgentDashboard },
@@ -55,7 +52,8 @@ export const routes: Routes = [
       { path: 'agent-claims/:id', component: AgentClaimsDetails },
       { path: 'agent-customers', component: AgentCustomers },
       { path: 'agent-customers/:id', component: AgentCustomerDetails },
-      { path: 'agent-policies', component: AgentPolicies }
+      { path: 'agent-policies', component: AgentPolicies },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent) },

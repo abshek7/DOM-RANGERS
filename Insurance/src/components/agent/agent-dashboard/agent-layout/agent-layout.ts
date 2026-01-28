@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-
+import { Component, signal ,inject} from '@angular/core';
+import {Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../../app/core/services/auth.service';
 import {
   LucideAngularModule,
   Shield,
@@ -28,4 +28,12 @@ export class AgentLayout {
   readonly Receipt = Receipt;
   // readonly Settings = Settings;
   readonly LogOut = LogOut;
+  private auth = inject(AuthService);
+  router = inject(Router)
+  open = signal(false);
+  logout() {
+    this.router.navigateByUrl('');
+    this.auth.logout();
+    this.open.set(false);
+  }
 }

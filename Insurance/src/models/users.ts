@@ -1,4 +1,4 @@
- export type UserRole = 'admin' | 'customer' | 'agent';
+export type UserRole = 'admin' | 'customer' | 'agent';
 
 export interface User {
   id?: number;
@@ -15,4 +15,9 @@ export interface User {
 export interface AuthSession {
   token: string;
   user: Omit<User, 'password'>;
+}
+
+export interface AuthSession {
+  user: User;
+  token: string;
 }

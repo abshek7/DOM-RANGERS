@@ -115,22 +115,17 @@ export class AuthService {
     const checkUsername$ = this.http.get<User[]>(`${this.baseUrl}/users`, {
       params: new HttpParams().set('username', payload.username),
     });
-
     return forkJoin({ byEmail: checkEmail$, byUsername: checkUsername$ }).pipe(
       switchMap(({ byEmail, byUsername }) => {
         if (byEmail?.length) return throwError(() => new Error('Email already exists.'));
         if (byUsername?.length) return throwError(() => new Error('Username already exists.'));
-
-        // 1) hash before storing in /users
         return from(this.hashPassword((payload as any).password)).pipe(
           switchMap((passwordHash) => {
             const newUser: User = {
               ...payload,
               createdAt,
-              password: passwordHash, // ✅ hashed stored in users
+              password: passwordHash,
             } as User;
-
-            // 2) create in /users
             return this.http.post<User>(`${this.baseUrl}/users`, newUser);
           })
         );
@@ -160,9 +155,7 @@ export class AuthService {
       // 4) auto-login same as before
       switchMap((createdUser) => {
         const safeUser = this.stripPassword(createdUser);
-
         if (!autoLogin) return of(safeUser);
-
         const token = this.createFakeJwt({
           sub: String(createdUser.id ?? ''),
           role: createdUser.role,
@@ -196,26 +189,6 @@ export class AuthService {
     return Math.floor(Date.now() / 1000) < exp;
   }
 
-  // ---------- NEW: create role profile ----------
-  private createRoleProfile(createdUser: User): Observable<any> {
-    const endpoint = createdUser.role === 'agent' ? 'agents' : 'customers';
-
-    const roleDoc = {
-      userId: createdUser.id, // link to users
-      firstName: createdUser.firstName,
-      lastName: createdUser.lastName,
-      username: createdUser.username,
-      email: createdUser.email,
-      phone: createdUser.phone,
-      role: createdUser.role,
-      createdAt: new Date().toISOString(),
-      status: 'active',
-    };
-
-    return this.http.post(`${this.baseUrl}/${endpoint}`, roleDoc);
-  }
-
-  // ---------- Password Hashing (Frontend) ----------
   private async hashPassword(password: string): Promise<string> {
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
     const input = `${password}::${PEPPER}`;
@@ -231,7 +204,6 @@ export class AuthService {
       .join('');
   }
 
-  // ---------- Helpers ----------
   private stripPassword(u: User): AuthSession['user'] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...safe } = u as any;

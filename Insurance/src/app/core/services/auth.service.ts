@@ -118,31 +118,24 @@ export class AuthService {
     const checkUsername$ = this.http.get<User[]>(`${this.baseUrl}/users`, {
       params: new HttpParams().set('username', payload.username),
     });
-
     return forkJoin({ byEmail: checkEmail$, byUsername: checkUsername$ }).pipe(
       switchMap(({ byEmail, byUsername }) => {
         if (byEmail?.length) return throwError(() => new Error('Email already exists.'));
         if (byUsername?.length) return throwError(() => new Error('Username already exists.'));
-
-        // hash before storing
         return from(this.hashPassword((payload as any).password)).pipe(
           switchMap((passwordHash) => {
             const newUser: User = {
               ...payload,
               createdAt,
-              // store hash instead of plaintext
               password: passwordHash,
             } as User;
-
             return this.http.post<User>(`${this.baseUrl}/users`, newUser);
           })
         );
       }),
       switchMap((createdUser) => {
         const safeUser = this.stripPassword(createdUser);
-
         if (!autoLogin) return of(safeUser);
-
         const token = this.createFakeJwt({
           sub: String(createdUser.id ?? ''),
           role: createdUser.role,
@@ -175,7 +168,6 @@ export class AuthService {
     return Math.floor(Date.now() / 1000) < exp;
   }
 
-  // ---------- Password Hashing (Frontend) ----------
   private async hashPassword(password: string): Promise<string> {
     // optional "pepper" (still visible in frontend, but avoids plain text)
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
@@ -193,7 +185,6 @@ export class AuthService {
       .join('');
   }
 
-  // ---------- Helpers ----------
   private stripPassword(u: User): AuthSession['user'] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...safe } = u as any;

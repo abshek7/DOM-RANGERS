@@ -1,4 +1,11 @@
 import { Routes } from '@angular/router';
+import { AgentLayout } from '../components/agent/agent-dashboard/agent-layout/agent-layout';
+import { AgentDashboard } from '../components/agent/agent-dashboard/agent-dashboard/agent-dashboard';
+import { AgentClaims } from '../components/agent/agent-dashboard/agent-claims/agent-claims';
+import { AgentClaimsDetails } from '../components/agent/agent-dashboard/agent-claims-details/agent-claims-details';
+import { AgentCustomers } from '../components/agent/agent-dashboard/agent-customers/agent-customers';
+import { AgentCustomerDetails } from '../components/agent/agent-dashboard/agent-customers-details/agent-customer-details';
+import { AgentPolicies } from '../components/agent/agent-dashboard/agent-policies/agent-policies';
 import { Layout } from '../components/admin/layout/layout';
 import { AdminDashboard } from '../components/admin/admin-dashboard/admin-dashboard';
 import { Agentmanagement } from '../components/admin/agentmanagement/agentmanagement';
@@ -14,8 +21,6 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent) },
   { path: 'unauthorized', loadComponent: () => import('./pages/auth/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
-
-  // Guarded role dashboards (placeholders)
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard],
@@ -40,8 +45,16 @@ export const routes: Routes = [
     path: 'agent',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['agent'] },
-    loadComponent: () => import('./pages/dashboards/agent-shell.component').then(m => m.AgentShellComponent),
+    component: AgentLayout,
+    children: [
+      { path: 'agent-dashboard', component: AgentDashboard },
+      { path: 'agent-claims', component: AgentClaims },
+      { path: 'agent-claims/:id', component: AgentClaimsDetails },
+      { path: 'agent-customers', component: AgentCustomers },
+      { path: 'agent-customers/:id', component: AgentCustomerDetails },
+      { path: 'agent-policies', component: AgentPolicies },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
   },
-
   { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent) },
 ];

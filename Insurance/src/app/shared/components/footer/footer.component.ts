@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <footer class="mt-16 border-t bg-slate-950 text-slate-200">
+    <footer class=" border-t bg-slate-950 text-slate-200">
       <!-- Top area -->
       <div class="mx-auto max-w-7xl px-4 py-12">
         <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-12">

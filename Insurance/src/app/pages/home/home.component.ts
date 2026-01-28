@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,NavbarComponent],
   template: `
+<app-navbar></app-navbar>
   <section class="bg-gradient-to-b from-slate-50 to-white">
     <div class="mx-auto max-w-7xl px-4 py-14">
       <div class="grid items-center gap-10 md:grid-cols-2">
@@ -75,6 +76,7 @@ import { AuthService } from '../../core/services/auth.service';
                 </div>
               </div>
             </div>
+
           </div>
           <div class="pointer-events-none absolute -inset-2 -z-10 rounded-[2rem] bg-gradient-to-r from-slate-200 to-slate-100 blur-2xl"></div>
         </div>

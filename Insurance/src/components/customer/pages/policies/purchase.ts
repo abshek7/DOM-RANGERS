@@ -20,19 +20,30 @@ export class PurchaseComponent implements OnInit {
     age: number = 25;
     duration: number = 1;
     recalculatedPremium: number = 0;
+    isAlreadyOwned: boolean = false;
+    ownedPolicyStatus: string = '';
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private policyService: PolicyService,
         private customerService: CustomerService
-    ) { }
+    ) {
+       
+        const navigation = this.router.getCurrentNavigation();
+        if (navigation?.extras.state && navigation.extras.state['policy']) {
+            this.policy = navigation.extras.state['policy'];
+            this.calculateValues();
+        }
+    }
 
     ngOnInit(): void {
         this.policyId = this.route.snapshot.paramMap.get('id') || '';
-        if (this.policyId) {
+
+      
+        if (!this.policy && this.policyId) {
             this.loadPolicyDetails();
-        } else {
+        } else if (!this.policy && !this.policyId) {
             alert('No policy selected.');
             this.router.navigate(['/customer/marketplace']);
         }
@@ -48,7 +59,15 @@ export class PurchaseComponent implements OnInit {
                     this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
                         next: (customers) => {
                             if (customers.length > 0) {
-                                this.customerId = customers[0].id;
+                                const customer = customers[0];
+                                this.customerId = customer.id;
+
+                           
+                                const existingPolicy = customer.policies?.find((p: any) => p.policyId === this.policyId);
+                                if (existingPolicy) {
+                                    this.isAlreadyOwned = true;
+                                    this.ownedPolicyStatus = existingPolicy.status;
+                                }
                             }
                         }
                     });
@@ -94,6 +113,13 @@ export class PurchaseComponent implements OnInit {
 
         this.loading = true;
         this.customerService.getCustomerById(this.customerId).subscribe(customer => {
+    
+            if (customer.policies?.some((p: any) => p.policyId === this.policyId)) {
+                alert('Policy already owned');
+                this.loading = false;
+                return;
+            }
+
             const newPolicy = {
                 policyId: this.policyId,
                 policyName: this.policy?.name || '',

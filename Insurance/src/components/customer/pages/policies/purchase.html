@@ -11,11 +11,7 @@
         </button>
     </header>
 
-    <div *ngIf="loading" class="py-20 text-center font-bold text-slate-400">
-        Processing...
-    </div>
-
-    <div *ngIf="!loading && policy" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div *ngIf="policy" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div class="lg:col-span-3 space-y-8">
             <div class="bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden">
                 <div class="relative z-10">
@@ -90,14 +86,30 @@
                         </div>
                     </div>
 
-                    <button (click)="onSubmit()"
-                        class="w-full py-5 bg-blue-600 text-white rounded-[2rem] font-black hover:bg-blue-500 hover:scale-[1.02] transition-all shadow-xl shadow-blue-600/20 active:scale-95">
-                        Request to Buy Policy
+                    <div *ngIf="isAlreadyOwned"
+                        class="p-5 bg-blue-50/10 border border-blue-400/20 rounded-2xl flex flex-col gap-2">
+                        <div class="flex items-center gap-2 text-blue-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-sm font-black uppercase tracking-widest">Policy Already Owned</span>
+                        </div>
+                        <p class="text-xs text-white/60 font-medium">Current status: <span
+                                class="text-white uppercase">{{ ownedPolicyStatus }}</span></p>
+                    </div>
+
+                    <button (click)="onSubmit()" [disabled]="isAlreadyOwned" [class.opacity-50]="isAlreadyOwned"
+                        [class.cursor-not-allowed]="isAlreadyOwned"
+                        class="w-full py-5 bg-blue-600 text-white rounded-[2rem] font-black hover:bg-blue-500 hover:scale-[1.02] transition-all shadow-xl shadow-blue-600/20 active:scale-95 disabled:hover:scale-100 disabled:shadow-none">
+                        {{ isAlreadyOwned ? 'Purchased' : 'Request to Buy Policy' }}
                     </button>
                 </div>
             </div>
 
-            
+
         </div>
     </div>
 </div>

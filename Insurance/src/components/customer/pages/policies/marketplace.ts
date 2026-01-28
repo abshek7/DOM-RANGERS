@@ -19,6 +19,7 @@ export class MarketplaceComponent implements OnInit {
     selectedType: string = 'all';
     policyTypes = ['all', 'health', 'life', 'vehicle', 'travel'];
     age: number = 25;
+    ownedPolicyIds: string[] = [];
 
     constructor(
         private policyService: PolicyService,
@@ -26,7 +27,22 @@ export class MarketplaceComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.loadCustomerOwnedPolicies();
         this.loadPolicies();
+    }
+
+    loadCustomerOwnedPolicies(): void {
+        this.policyService.http.get<any[]>('http://localhost:3000/users').subscribe((users: any[]) => {
+            const firstCustomer = users.find((u: any) => u.role === 'customer');
+            if (firstCustomer) {
+                this.policyService.http.get<any[]>(`http://localhost:3000/customers?userId=${firstCustomer.id}`).subscribe((customers: any[]) => {
+                    if (customers.length > 0) {
+                        this.ownedPolicyIds = customers[0].policies?.map((p: any) => p.policyId) || [];
+                        this.applyFilters();
+                    }
+                });
+            }
+        });
     }
 
     loadPolicies(): void {
@@ -65,7 +81,8 @@ export class MarketplaceComponent implements OnInit {
             })
             .map(p => ({
                 ...p,
-                recalculatedPremium: Math.round(p.premium * factor)
+                recalculatedPremium: Math.round(p.premium * factor),
+                isOwned: this.ownedPolicyIds.includes(p.id)
             } as any));
         this.cdr.detectChanges();
     }

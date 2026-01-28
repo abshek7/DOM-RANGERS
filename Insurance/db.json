@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "username": "rohith123",
       "email": "rohith.admin@insurance.com",
       "password": "admin@123",
@@ -12,7 +12,7 @@
       "createdAt": "2024-12-01T09:30:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "username": "rithwika123",
       "email": "rithwika.n@gmail.com",
       "password": "rithu@123",
@@ -23,7 +23,7 @@
       "createdAt": "2024-12-10T11:15:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "username": "abhishek123",
       "email": "abhishek.agent@insurance.com",
       "password": "agent@123",
@@ -65,56 +65,6 @@
           ]
         },
         {
-          "policyId": "POL-201",
-          "policyName": "Health Secure Plus",
-          "premium": 6500,
-          "coverage": 700000,
-          "duration": 1,
-          "status": "pending",
-          "renewalDate": "2027-01-27T19:00:12.814Z",
-          "payments": []
-        },
-        {
-          "policyId": "POL-203",
-          "policyName": "Motor Guard Elite",
-          "premium": 4500,
-          "coverage": 500000,
-          "duration": 1,
-          "status": "pending",
-          "renewalDate": "2027-01-27T19:00:32.770Z",
-          "payments": []
-        },
-        {
-          "policyId": "POL-201",
-          "policyName": "Health Secure Plus",
-          "premium": 6500,
-          "coverage": 700000,
-          "duration": 1,
-          "status": "pending",
-          "renewalDate": "2027-01-27T19:01:27.321Z",
-          "payments": []
-        },
-        {
-          "policyId": "POL-201",
-          "policyName": "Health Secure Plus",
-          "premium": 6500,
-          "coverage": 700000,
-          "duration": 1,
-          "status": "pending",
-          "renewalDate": "2027-01-27T19:06:00.524Z",
-          "payments": []
-        },
-        {
-          "policyId": "POL-201",
-          "policyName": "Health Secure Plus",
-          "premium": 6500,
-          "coverage": 700000,
-          "duration": 1,
-          "status": "pending",
-          "renewalDate": "2027-01-27T19:15:53.590Z",
-          "payments": []
-        },
-        {
           "policyId": "POL-202",
           "policyName": "Life Shield Premium",
           "premium": 12000,
@@ -141,7 +91,7 @@
           "coverage": 700000,
           "duration": 1,
           "status": "pending",
-          "renewalDate": "2027-01-27T20:03:01.331Z",
+          "renewalDate": "2027-01-28T04:07:39.498Z",
           "payments": []
         }
       ],

@@ -94,7 +94,11 @@ export class FileClaimComponent implements OnInit {
             date: this.formData.date,
             description: this.formData.description,
             status: 'pending',
-            documents: this.selectedFiles
+            documents: this.selectedFiles,
+            assignedAgent: {
+agentId: this.customer.assignedAgent.agentId,
+name: this.customer.assignedAgent.name
+},
         };
 
         this.claimService.fileClaim(newClaim).subscribe({

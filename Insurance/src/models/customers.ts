@@ -1,5 +1,5 @@
 export interface Customer {
-  id: string; 
+  id: string;
   userId: number;
   nominee: string;
   address: string;
@@ -24,13 +24,6 @@ export interface Customer {
       date: string;
       status: 'paid' | 'pending' | 'failed';
       transactionId?: string;
-    }[];
-
-    documents: {
-      type: string;
-      fileName: string;
-      uploadedAt: string;
-      verified: boolean;
     }[];
   }[];
 

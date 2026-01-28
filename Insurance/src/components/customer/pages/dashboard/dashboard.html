@@ -1,0 +1,45 @@
+<div class="space-y-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-sm text-gray-500">Welcome back! Here's what's happening with your insurance.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Policies</h3>
+            <div class="mt-2 flex items-baseline">
+                <span class="text-3xl font-bold text-gray-900">{{ stats.totalPolicies }}</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Pending Claims</h3>
+            <div class="mt-2 flex items-baseline">
+                <span class="text-3xl font-bold text-yellow-600">{{ stats.pendingClaims }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
+        </div>
+        <div class="divide-y divide-gray-200">
+            <div *ngFor="let activity of stats.recentActivity" class="px-6 py-4 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-900">{{ activity.title }}</p>
+                    <p class="text-xs text-gray-500">{{ activity.description }}</p>
+                    <p class="text-[10px] text-gray-400 mt-1 uppercase">{{ activity.date | date:'mediumDate' }}</p>
+                </div>
+                <span [class]="'px-2.5 py-0.5 rounded-full text-xs font-medium ' + getStatusClass(activity.status)">
+                    {{ activity.status }}
+                </span>
+            </div>
+            <div *ngIf="stats.recentActivity.length === 0" class="px-6 py-10 text-center text-gray-500 text-sm">
+                No recent activity to show.
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,9 +3,7 @@ export interface Agent {
   userId: number;
   licenseNumber: string;
   commissionRate: number;
-
   assignedCustomers: string[];
-
   totalPoliciesSold: number;
 
   sales: {
@@ -22,10 +20,11 @@ export interface Agent {
     status: 'pending' | 'earned';
     earnedAt?: string;
   }[];
-
   communicationLogs: {
     customerId: string;
     message: string;
     date: string;
   }[];
+  
+
 }

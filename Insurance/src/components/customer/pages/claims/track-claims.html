@@ -1,0 +1,69 @@
+<div class="space-y-8 animate-fadeIn">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Claim Tracker</h1>
+            <p class="text-slate-500 font-medium mt-1">Monitor your active and historical insurance claims.</p>
+        </div>
+        <button routerLink="/customer/file-claim"
+            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-95">
+            File New Claim
+        </button>
+    </div>
+
+    <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit">
+        <button *ngFor="let option of statusOptions" (click)="selectedFilter = option"
+            [class]="'px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ' + 
+                   (selectedFilter === option ? 'bg-white text-blue-600 shadow-sm scale-105' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50')">
+            {{ option | titlecase }}
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+        <div *ngFor="let i of [1,2,3]" class="h-64 bg-white rounded-3xl border border-slate-100"></div>
+    </div>
+
+    <div *ngIf="!loading && filteredClaims.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let claim of filteredClaims"
+            class="group bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden">
+
+            <div class="flex items-center justify-between mb-6">
+                <span
+                    [class]="'px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ' + getStatusClass(claim.status)">
+                    {{ claim.status }}
+                </span>
+            </div>
+
+            <h3 class="text-xl font-black text-slate-800 mb-2">{{ claim.type }}</h3>
+            <p class="text-sm text-slate-500 mb-6 line-clamp-2 leading-relaxed">{{ claim.description }}</p>
+
+            <div class="mt-auto space-y-4">
+                <div class="grid grid-cols-2 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div>
+                        <span
+                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount</span>
+                        <span class="text-lg font-black text-slate-800">₹{{ claim.amount | number }}</span>
+                    </div>
+                    <div class="text-right">
+                        <span
+                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</span>
+                        <span class="text-sm font-bold text-slate-600">{{ claim.date | date:'mediumDate' }}</span>
+                    </div>
+                </div>
+
+                <div *ngIf="claim.remarks"
+                    class="p-4 bg-yellow-50 rounded-2xl border border-yellow-100 text-xs text-yellow-800 leading-relaxed italic">
+                    <span class="font-black not-italic block mb-1 uppercase tracking-tighter">Admin Remarks</span>
+                    {{ claim.remarks }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && filteredClaims.length === 0"
+        class="text-center py-24 bg-white rounded-[3rem] border border-dashed border-slate-200">
+        <h3 class="text-2xl font-black text-slate-800">No {{ selectedFilter }} claims</h3>
+        <p class="text-slate-500 mt-2 max-w-sm mx-auto">You don't have any claims registered in this category yet.</p>
+        <button routerLink="/customer/file-claim" class="mt-8 text-blue-600 font-bold hover:underline">File a new claim
+            now</button>
+    </div>
+</div>

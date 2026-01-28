@@ -1,5 +1,5 @@
-export interface Policies {
-  id: string; 
+export interface Policies{
+  id: string;
   name: string;
   type: 'health' | 'life' | 'vehicle' | 'travel';
   premium: number;

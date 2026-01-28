@@ -1,0 +1,54 @@
+<div class="max-w-4xl mx-auto">
+    <div *ngIf="policy" class="space-y-6">
+        <div class="mb-6">
+            <button class="text-blue-500 hover:underline mb-4" routerLink="/customer/marketplace">
+                Back to Catalog
+            </button>
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                <div class="mb-6">
+                    <span
+                        class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wide">
+                        {{ policy.type }}
+                    </span>
+                    <h1 class="text-3xl font-bold text-slate-800 mt-2">{{ policy.name }}</h1>
+                    <p class="text-slate-600 mt-4 leading-relaxed">{{ policy.description }}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-y border-slate-50">
+                    <div>
+                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Annual
+                            Premium</span>
+                        <span class="text-3xl font-bold text-blue-600">{{ policy.premium | number }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Sum
+                            Insured</span>
+                        <span class="text-3xl font-bold text-green-600">{{ policy.coverage | number }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="font-bold text-slate-800 mb-4">Key Features</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <li *ngFor="let feature of policy.features" class="flex items-center gap-2 text-slate-600">
+                            - {{ feature }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-10">
+                    <button
+                        class="px-8 py-4 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
+                        [routerLink]="['/customer/purchase', policy.id]">
+                        Purchase This Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!policy && !loading" class="text-center py-20">
+        <h2 class="text-xl font-bold text-slate-400">Policy not found</h2>
+        <button routerLink="/customer/marketplace" class="mt-4 text-blue-500 hover:underline">Return to Catalog</button>
+    </div>
+</div>

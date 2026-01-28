@@ -1,0 +1,261 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "rohith123",
+      "email": "rohith.admin@insurance.com",
+      "password": "admin@123",
+      "role": "admin",
+      "firstName": "Rohith",
+      "lastName": "Reddy",
+      "phone": "9000011111",
+      "createdAt": "2024-12-01T09:30:00Z"
+    },
+    {
+      "id": "2",
+      "username": "rithwika123",
+      "email": "rithwika.n@gmail.com",
+      "password": "rithu@123",
+      "role": "customer",
+      "firstName": "Rithwika",
+      "lastName": "Nagula",
+      "phone": "9876501234",
+      "createdAt": "2024-12-10T11:15:00Z"
+    },
+    {
+      "id": "3",
+      "username": "abhishek123",
+      "email": "abhishek.agent@insurance.com",
+      "password": "agent@123",
+      "role": "agent",
+      "firstName": "Abhishek",
+      "lastName": "Sharma",
+      "phone": "8899001122",
+      "createdAt": "2024-12-05T08:45:00Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "CUST-101",
+      "userId": 2,
+      "nominee": "Rohith Reddy",
+      "address": "VNR Vignana Jyothi, Hyderabad",
+      "dateOfBirth": "2003-08-14",
+      "aadharNumber": "567812349876",
+      "panNumber": "FGRPN1234K",
+      "assignedAgent": {
+        "agentId": "AGT-101",
+        "name": "Abhishek Sharma",
+        "commissionRate": 0.05
+      },
+      "policies": [
+        {
+          "policyId": "POL-201",
+          "policyName": "Health Protector",
+          "premium": 6500,
+          "status": "active",
+          "renewalDate": "2026-01-10",
+          "payments": [
+            {
+              "amount": 6500,
+              "date": "2025-01-10",
+              "status": "paid",
+              "transactionId": "TXN-45678"
+            }
+          ]
+        },
+        {
+          "policyId": "POL-202",
+          "policyName": "Life Shield Premium",
+          "premium": 12000,
+          "coverage": 1500000,
+          "duration": 20,
+          "status": "pending",
+          "renewalDate": "2046-01-22T19:18:56.715Z",
+          "payments": []
+        },
+        {
+          "policyId": "POL-203",
+          "policyName": "Motor Guard Elite",
+          "premium": 4500,
+          "coverage": 500000,
+          "duration": 1,
+          "status": "pending",
+          "renewalDate": "2027-01-27T19:56:52.311Z",
+          "payments": []
+        },
+        {
+          "policyId": "POL-201",
+          "policyName": "Health Secure Plus",
+          "premium": 6500,
+          "coverage": 700000,
+          "duration": 1,
+          "status": "pending",
+          "renewalDate": "2027-01-28T04:07:39.498Z",
+          "payments": []
+        }
+      ],
+      "claims": [
+        "CLM-201"
+      ]
+    }
+  ],
+  "policies": [
+    {
+      "id": "POL-201",
+      "name": "Health Secure Plus",
+      "type": "health",
+      "premium": 6500,
+      "coverage": 700000,
+      "duration": 1,
+      "description": "Advanced health insurance with enhanced coverage.",
+      "features": [
+        "Cashless hospitalization",
+        "Annual health checkup",
+        "Pre & post hospitalization"
+      ],
+      "createdAt": "2024-11-15T10:00:00Z",
+      "rating": 4.8,
+      "reviewCount": 124,
+      "cancellationRequests": [
+        {
+          "customerId": "CUST-101",
+          "date": "2026-01-27T19:16:53.601Z",
+          "reason": "not interested"
+        },
+        {
+          "customerId": "CUST-101",
+          "date": "2026-01-27T19:17:00.624Z",
+          "reason": ""
+        }
+      ],
+      "endorsementRequests": []
+    },
+    {
+      "id": "POL-202",
+      "name": "Life Shield Premium",
+      "type": "life",
+      "premium": 12000,
+      "coverage": 1500000,
+      "duration": 20,
+      "description": "Long-term life insurance for family security.",
+      "features": [
+        "Accidental death benefit",
+        "Critical illness rider",
+        "Tax benefits"
+      ],
+      "createdAt": "2024-10-20T08:00:00Z",
+      "rating": 4.5,
+      "reviewCount": 89,
+      "cancellationRequests": [],
+      "endorsementRequests": []
+    },
+    {
+      "id": "POL-203",
+      "name": "Motor Guard Elite",
+      "type": "vehicle",
+      "premium": 4500,
+      "coverage": 500000,
+      "duration": 1,
+      "description": "Comprehensive insurance for your vehicle.",
+      "features": [
+        "Third-party liability",
+        "Zero depreciation",
+        "Roadside assistance"
+      ],
+      "createdAt": "2024-12-01T09:00:00Z",
+      "rating": 4.7,
+      "reviewCount": 56,
+      "cancellationRequests": [],
+      "endorsementRequests": []
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLM-201",
+      "policyId": "POL-201",
+      "customerId": "CUST-101",
+      "type": "Hospitalization",
+      "amount": 32000,
+      "date": "2025-01-20",
+      "status": "pending",
+      "description": "Viral infection treatment and tests.",
+      "assignedAgent": {
+        "agentId": "AGT-101",
+        "name": "Abhishek Sharma"
+      },
+      "remarks": "Bills under verification."
+    },
+    {
+      "id": "CLM-1641",
+      "customerId": "CUST-101",
+      "policyId": "POL-201",
+      "type": "Health",
+      "amount": 5000000,
+      "date": "2026-01-27",
+      "description": "accident",
+      "status": "pending"
+    },
+    {
+      "id": "CLM-2062",
+      "customerId": "CUST-101",
+      "policyId": "POL-202",
+      "type": "Health",
+      "amount": 56000,
+      "date": "2026-01-27",
+      "description": "life",
+      "status": "pending",
+      "documents": [
+        "models.txt"
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "AGT-101",
+      "userId": 3,
+      "licenseNumber": "LIC-88991",
+      "commissionRate": 0.05,
+      "assignedCustomers": [
+        "CUST-101"
+      ],
+      "totalPoliciesSold": 18,
+      "sales": [
+        {
+          "policyId": "POL-201",
+          "customerId": "CUST-101",
+          "premium": 6500,
+          "soldAt": "2025-01-10T10:00:00Z"
+        }
+      ],
+      "commissions": [
+        {
+          "policyId": "POL-201",
+          "claimId": "CLM-201",
+          "amount": 325,
+          "status": "pending"
+        }
+      ],
+      "communicationLogs": [
+        {
+          "customerId": "CUST-101",
+          "message": "Your policy is active. Feel free to contact me anytime.",
+          "date": "2025-01-11T11:00:00Z"
+        }
+      ]
+    }
+  ],
+  "payments": [
+    {
+      "id": "PAY-201",
+      "customerId": "CUST-101",
+      "policyId": "POL-201",
+      "amount": 6500,
+      "date": "2025-01-10",
+      "status": "success",
+      "paymentMethod": "upi",
+      "transactionId": "TXN-45678",
+      "description": "Premium payment for Health Secure Plus"
+    }
+  ]
+}

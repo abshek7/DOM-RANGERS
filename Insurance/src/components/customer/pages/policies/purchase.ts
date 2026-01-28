@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Policies } from '../../../../models/policies';
 import { PolicyService } from '../../../../services/policyservice';
 import { CustomerService } from '../../../../services/customerservice';
-
+import { AuthService } from '../../../../app/core/services/auth.service';
 @Component({
     selector: 'app-purchase',
     standalone: true,
@@ -27,7 +27,8 @@ export class PurchaseComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private policyService: PolicyService,
-        private customerService: CustomerService
+        private customerService: CustomerService,
+        private authService: AuthService
     ) {
 
         const navigation = this.router.getCurrentNavigation();
@@ -38,43 +39,29 @@ export class PurchaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.policyId = this.route.snapshot.paramMap.get('id') || '';
+  this.policyId = this.route.snapshot.paramMap.get('id') || '';
 
+  if (!this.policy && this.policyId) {
+    this.loadPolicyDetails();
+  }
 
-        if (!this.policy && this.policyId) {
-            this.loadPolicyDetails();
-        } else if (!this.policy && !this.policyId) {
-            alert('No policy selected.');
-            this.router.navigate(['/customer/marketplace']);
-        }
+  const userId = this.authService.user?.id;
+  if (!userId) return;
 
-        this.route.queryParams.subscribe(params => {
-            if (params['age']) this.age = +params['age'];
-        });
+  this.customerService.getCustomers().subscribe(customers => {
+    const customer = customers.find(c => c.userId === userId);
+    if (!customer) return;
 
-        this.customerService.getUsers().subscribe({
-            next: (users) => {
-                const firstCustomer = users.find(u => u.role === 'customer' && u.id !== undefined);
-                if (firstCustomer && firstCustomer.id !== undefined) {
-                    this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
-                        next: (customers) => {
-                            if (customers.length > 0) {
-                                const customer = customers[0];
-                                this.customerId = customer.id;
+    this.customerId = customer.id;
 
-
-                                const existingPolicy = customer.policies?.find((p: any) => p.policyId === this.policyId);
-                                if (existingPolicy) {
-                                    this.isAlreadyOwned = true;
-                                    this.ownedPolicyStatus = existingPolicy.status;
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        });
+    const owned = customer.policies?.find(p => p.policyId === this.policyId);
+    if (owned) {
+      this.isAlreadyOwned = true;
+      this.ownedPolicyStatus = owned.status;
     }
+  });
+}
+
 
     loadPolicyDetails(): void {
         this.loading = true;

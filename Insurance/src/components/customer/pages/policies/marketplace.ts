@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Policies } from '../../../../models/policies';
 import { PolicyService } from '../../../../services/policyservice';
 import { CustomerService } from '../../../../services/customerservice';
-
+import { AuthService } from '../../../../app/core/services/auth.service';
 @Component({
     selector: 'app-marketplace',
     standalone: true,
@@ -25,27 +25,26 @@ export class MarketplaceComponent implements OnInit {
     constructor(
         private policyService: PolicyService,
         private customerService: CustomerService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
-        this.loadCustomerOwnedPolicies();
-        this.loadPolicies();
-    }
+  this.loadCustomerOwnedPolicies();
+  this.loadPolicies();
+}
 
-    loadCustomerOwnedPolicies(): void {
-        this.customerService.getUsers().subscribe((users: any[]) => {
-            const firstCustomer = users.find((u: any) => u.role === 'customer');
-            if (firstCustomer && firstCustomer.id !== undefined) {
-                this.customerService.getCustomerByUserId(firstCustomer.id).subscribe((customers: any[]) => {
-                    if (customers.length > 0) {
-                        this.ownedPolicyIds = customers[0].policies?.map((p: any) => p.policyId) || [];
-                        this.applyFilters();
-                    }
-                });
-            }
-        });
-    }
+loadCustomerOwnedPolicies(): void {
+  const userId = this.authService.user?.id;
+  if (!userId) return;
+
+  this.customerService.getCustomers().subscribe(customers => {
+    const customer = customers.find(c => c.userId === userId);
+    this.ownedPolicyIds = customer?.policies?.map(p => p.policyId) || [];
+    this.applyFilters();
+  });
+}
+
 
     loadPolicies(): void {
         this.loading = true;

@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserRole } from '../../../../models/users';
-
+import { AdminService } from '../../../../services/adminservice';
 
 @Component({
   standalone: true,
@@ -81,10 +81,10 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
-
+  private AdminService = inject(AdminService);
   loading = false;
   error = '';
-
+  users:any;
   form = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -104,8 +104,9 @@ export class RegisterComponent {
 
     this.loading = true;
     const v = this.form.getRawValue();
-
+    this.users=this.AdminService.getUsers();
     this.auth.register({
+      id: this.users.length + 1,
       firstName: v.firstName!,
       lastName: v.lastName!,
       username: v.username!,

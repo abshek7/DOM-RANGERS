@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AdminService {
-  const_api='https://insurance-1-ylo4.onrender.com';  
+  const_api='http://localhost:3000';  
   constructor(private http: HttpClient) {}
 
   getUsers() {

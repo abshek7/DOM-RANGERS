@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PoliciesService } from '../../../../services/policiesService';
+import { AdminService } from '../../../../services/adminservice';
+import { AuthService } from '../../../../app/core/services/auth.service';
 import { Policies } from '../../../../models/policies';
-
+import { Customer } from '../../../../models/customers';
+import { ChangeDetectorRef } from '@angular/core';
 import {
   LucideAngularModule,
   FileText,
@@ -13,6 +15,7 @@ import {
   ChevronDown,
 } from 'lucide-angular';
 import { DatePipe, CurrencyPipe } from '@angular/common';
+import { PoliciesService } from '../../../../services/policiesService';
 
 @Component({
   standalone: true,
@@ -22,9 +25,9 @@ import { DatePipe, CurrencyPipe } from '@angular/common';
 })
 export class AgentPolicies implements OnInit {
   selectedPolicy: Policies | null = null;
-  displayedPolicies: Policies[] = [];
+  displayedPolicies: any[] = [];
+  allPolicies: any[] = [];
 
-  // Icons
   readonly FileText = FileText;
   readonly IndianRupee = IndianRupee;
   readonly Shield = Shield;
@@ -33,28 +36,49 @@ export class AgentPolicies implements OnInit {
   readonly CheckCircle = CheckCircle;
   readonly ChevronDown = ChevronDown;
 
-  constructor(public policiesService: PoliciesService) {}
+  constructor(
+    private adminService: AdminService,
+    private auth: AuthService,
+    public policiesService: PoliciesService
+    ,private ChangeDetectorRef:ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.policiesService.loadPolicies();
-    this.displayedPolicies = this.policiesService.policies();
+    this.loadAgentPolicies();
+  }
+
+  private loadAgentPolicies(): void {
+    this.adminService.getAgents().subscribe((agents) => {
+      const agent = agents.find(a => a.userId === this.auth.user?.id);
+      if (!agent) return;
+
+      this.adminService.getCustomers().subscribe((customers: any) => {
+        const policies = customers
+          .flatMap((c:any) => c.policies || [])
+          .filter((p:any) => p.assignedAgentId === agent.id);
+        console.log('Agent Policies:', policies);
+        this.allPolicies = policies;
+        this.displayedPolicies = [...policies];
+        console.log('Displayed Policies:', this.displayedPolicies);
+        this.ChangeDetectorRef?.detectChanges();
+      });
+    });
   }
 
   onSelectPolicy(policyId: string): void {
     if (policyId === 'all') {
       this.selectedPolicy = null;
-      this.displayedPolicies = this.policiesService.policies();
+      this.displayedPolicies = [...this.allPolicies];
       return;
     }
 
-    const policy = this.policiesService.policies().find((p) => p.id === policyId) ?? null;
-
+    const policy = this.allPolicies.find(p => p.policyId === policyId) ?? null;
     this.selectedPolicy = policy;
     this.displayedPolicies = policy ? [policy] : [];
   }
 
-  policyCardClass(policy: Policies): string {
-    return this.selectedPolicy?.id === policy.id
+  policyCardClass(policy: any): string {
+    return this.selectedPolicy?.id === policy.policyId
       ? 'border-indigo-500 ring-2 ring-indigo-100'
       : 'border-gray-200 hover:shadow-lg';
   }

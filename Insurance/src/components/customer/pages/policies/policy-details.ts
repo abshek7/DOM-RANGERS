@@ -21,11 +21,13 @@ export class PolicyDetailsComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.policyId = this.route.snapshot.paramMap.get('id') || '';
-        if (this.policyId) {
-            this.loadPolicyDetails();
-        }
-    }
+  this.policyId = this.route.snapshot.paramMap.get('id') || '';
+  if (!this.policyId) {
+    this.loading = false;
+    return;
+  }
+  this.loadPolicyDetails();
+}
 
     loadPolicyDetails(): void {
         this.loading = true;

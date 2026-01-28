@@ -9,6 +9,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    { provide: API_BASE_URL, useValue: 'https://insurance-1-ylo4.onrender.com' },
+    { provide: API_BASE_URL, useValue: 'http://localhost:3000' },
   ],
 };

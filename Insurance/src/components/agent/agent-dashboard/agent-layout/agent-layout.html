@@ -1,6 +1,6 @@
 <div class="flex min-h-screen bg-slate-100">
   <aside
-    class=" w-72 bg-gradient-to-b from-blue-900 to-blue-800 text-white flex flex-col shadow-xl transform transition-transform duration-300 lg:translate-x-0"
+    class=" w-72 bg-gradient-to-b from-amber-900 to-blue-800 text-white flex flex-col shadow-xl transform transition-transform duration-300 lg:translate-x-0"
   >
     <div class="px-5 py-6 border-b border-white/10">
       <div class="flex items-center gap-3 text-xl font-bold">
@@ -8,7 +8,6 @@
         <span>InsuranceHub</span>
       </div>
     </div>
-
     <div class="m-4 p-4 rounded-xl bg-white/5 flex items-center gap-3">
       <div
         class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-semibold"
@@ -17,7 +16,7 @@
       </div>
       <div>
         <h3 class="text-sm font-semibold">Agent User</h3>
-        <p class="text-xs opacity-80">AGT-001</p>
+        <p class="text-xs opacity-80"> {{currentAgent?.id}}</p>
       </div>
     </div>
     <nav class="flex-1 px-4">

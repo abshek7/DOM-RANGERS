@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { CustomerService } from '../../../../services/customerservice';
 import { PolicyService } from '../../../../services/policyservice';
 import { Customer } from '../../../../models/customers';
-
+import { AuthService } from '../../../../app/core/services/auth.service';
 @Component({
     selector: 'app-my-policies',
     standalone: true,
@@ -24,41 +24,37 @@ export class MyPoliciesComponent implements OnInit {
     constructor(
         private customerService: CustomerService,
         private policyService: PolicyService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
-        this.loadCustomerData();
-    }
+  this.loadCustomerData();
+}
 
-    loadCustomerData(): void {
-        this.loading = true;
-        this.customerService.getUsers().subscribe({
-            next: (users) => {
-                const firstCustomer = users.find(u => u.role === 'customer');
-                if (firstCustomer && firstCustomer.id !== undefined) {
-                    this.customerService.getCustomerByUserId(firstCustomer.id).subscribe({
-                        next: (customers) => {
-                            if (customers.length > 0) this.customer = customers[0];
-                            this.loading = false;
-                            this.cdr.detectChanges();
-                        },
-                        error: () => {
-                            this.loading = false;
-                            this.cdr.detectChanges();
-                        }
-                    });
-                } else {
-                    this.loading = false;
-                    this.cdr.detectChanges();
-                }
-            },
-            error: () => {
-                this.loading = false;
-                this.cdr.detectChanges();
-            }
-        });
+loadCustomerData(): void {
+  this.loading = true;
+
+  const userId = this.authService.user?.id;
+  if (!userId) {
+    this.loading = false;
+    this.cdr.detectChanges();
+    return;
+  }
+
+  this.customerService.getCustomers().subscribe({
+    next: (customers) => {
+      this.customer = customers.find(c => c.userId === userId) || null;
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.loading = false;
+      this.cdr.detectChanges();
     }
+  });
+}
+
 
     cancelPolicy(policyId: string): void {
         this.selectedPolicyId = policyId;

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef,Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../app/core/services/auth.service';
+import { AdminService } from '../../services/adminservice';
 
 interface MenuItem {
     label: string;
@@ -16,7 +18,7 @@ interface MenuItem {
 })
 export class CustomerLayoutComponent implements OnInit {
     customerName: string = 'Insurance User';
-    customerId: string = 'CUST-001';
+    customerId: string = '';
     showProfileMenu: boolean = false;
 
     menuItems: MenuItem[] = [
@@ -27,9 +29,19 @@ export class CustomerLayoutComponent implements OnInit {
         { label: 'Profile', route: '/customer/profile', icon: '' }
     ];
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private authService: AuthService, private adminService: AdminService,
+        private ChangeDetectorRef: ChangeDetectorRef
+    ) { }
 
     ngOnInit(): void {
+        this.adminService.getCustomers().subscribe((customers) => {
+            const customer = customers.find(c => c.userId === this.authService.user?.id);
+            console.log(customer);
+            if (customer) {
+                this.customerId = customer.id;
+            }
+            this.ChangeDetectorRef.detectChanges();
+        });
     }
 
     toggleProfileMenu(): void {
@@ -38,6 +50,7 @@ export class CustomerLayoutComponent implements OnInit {
 
     logout(): void {
         this.router.navigate(['/']);
+        this.authService.logout();
     }
 
     isActive(route: string): boolean {

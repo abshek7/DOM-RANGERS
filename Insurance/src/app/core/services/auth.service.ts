@@ -1,5 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Agent } from '../../../models/agents';
+import { Customer } from '../../../models/customers';
+import { AdminService } from '../../../services/adminservice';
 import {
   BehaviorSubject,
   catchError,
@@ -20,10 +23,13 @@ type StorageType = 'local' | 'session';
 export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = inject(API_BASE_URL);
-
+  private AdminService = inject(AdminService);
   private _user$ = new BehaviorSubject<AuthSession['user'] | null>(this.loadSession().user ?? null);
   user$ = this._user$.asObservable();
-
+  users:any = this.AdminService.getUsers().subscribe((data: any) => {});
+  agents: any = this.AdminService.getAgents().subscribe((data: any) => {});
+  customers: any = this.AdminService.getCustomers().subscribe((data: any) => {});
+  
   get user(): AuthSession['user'] | null {
     return this._user$.value;
   }
@@ -38,60 +44,45 @@ export class AuthService {
 
   // ---------- Public API ----------
 
-  login(identifier: string, password: string, rememberMe: boolean): Observable<AuthSession['user']> {
-    const isEmail = identifier.includes('@');
-
-    let params = new HttpParams();
-    params = isEmail ? params.set('email', identifier) : params.set('username', identifier);
-
-    return this.http.get<User[]>(`${this.baseUrl}/users`, { params }).pipe(
-      switchMap((users) => {
-        if (!users?.length) return throwError(() => new Error('Invalid credentials'));
-        const user = users[0];
-
-        return from(this.hashPassword(password)).pipe(
-          switchMap((enteredHash) => {
-            const stored = (user as any).password as string | undefined;
-
-            const looksHashed = typeof stored === 'string' && /^[a-f0-9]{64}$/i.test(stored);
-
-            if (looksHashed) {
-              if (stored !== enteredHash) return throwError(() => new Error('Invalid credentials'));
-              return of(user);
-            }
-
-            // legacy plaintext compare (for existing records)
-            if (stored !== password) return throwError(() => new Error('Invalid credentials'));
-
-            // migrate plaintext -> hash (best-effort)
-            if (user?.id != null) {
-              return this.http.patch<User>(`${this.baseUrl}/users/${user.id}`, { password: enteredHash }).pipe(
-                catchError(() => of(user)),
-                map(() => user)
-              );
-            }
-            return of(user);
-          }),
-          map((okUser) => {
-            const safeUser = this.stripPassword(okUser);
-
-            const token = this.createFakeJwt({
-              sub: String(okUser.id ?? ''),
-              role: okUser.role,
-              email: okUser.email,
-              username: okUser.username,
-              exp: Math.floor(Date.now() / 1000) + (rememberMe ? 7 * 24 * 3600 : 2 * 3600),
-            });
-
-            this.saveSession({ token, user: safeUser }, rememberMe ? 'local' : 'session');
-            this._user$.next(safeUser);
-            return safeUser;
-          })
-        );
-      }),
-      catchError((err) => throwError(() => new Error(this.prettyError(err))))
-    );
+  login(identifier: string, password: string, rememberMe: boolean) {
+  if (!password || password.length < 6) {
+    return throwError(() => new Error('Invalid credentials'));
   }
+
+  const isEmail = identifier.includes('@');
+  let params = new HttpParams();
+  params = isEmail ? params.set('email', identifier) : params.set('username', identifier);
+
+  return this.http.get<User[]>(`${this.baseUrl}/users`, { params }).pipe(
+    switchMap(users => {
+      if (!users?.length)
+        return throwError(() => new Error('Invalid credentials'));
+
+      const user = users[0];
+      return from(this.hashPassword(password)).pipe(
+        map(hash => {
+          if (user.password !== hash)
+            throw new Error('Invalid credentials');
+
+          const safeUser = this.stripPassword(user);
+          const token = this.createFakeJwt({
+            sub: String(user.id),
+            role: user.role,
+            email: user.email,
+            username: user.username,
+            exp: Math.floor(Date.now() / 1000) + (rememberMe ? 7 * 24 * 3600 : 2 * 3600),
+          });
+
+          this.saveSession({ token, user: safeUser }, rememberMe ? 'local' : 'session');
+          this._user$.next(safeUser);
+          return safeUser;
+        })
+      );
+    }),
+    catchError(err => throwError(() => new Error(this.prettyError(err))))
+  );
+}
+
 
   /**
    * ✅ UPDATED REGISTER:
@@ -100,7 +91,7 @@ export class AuthService {
    * - ALSO POST to /agents or /customers (without password)
    */
   register(
-    payload: Omit<User, 'id' | 'createdAt'> & { role: UserRole },
+    payload: Omit<User, 'createdAt'> & { role: UserRole },
     autoLogin = true
   ): Observable<AuthSession['user']> {
     const createdAt = new Date().toISOString().slice(0, 10);
@@ -108,7 +99,7 @@ export class AuthService {
     if (payload.role === 'admin') {
       return throwError(() => new Error('Admin registration is not allowed.'));
     }
-
+   
     const checkEmail$ = this.http.get<User[]>(`${this.baseUrl}/users`, {
       params: new HttpParams().set('email', payload.email),
     });
@@ -189,24 +180,44 @@ export class AuthService {
     return Math.floor(Date.now() / 1000) < exp;
   }
 
-
-  private createRoleProfile(createdUser: User): Observable<any> {
-    const endpoint = createdUser.role === 'agent' ? 'agents' : 'customers';
-
-    const roleDoc = {
-      userId: createdUser.id, // link to users
-      firstName: createdUser.firstName,
-      lastName: createdUser.lastName,
-      username: createdUser.username,
-      email: createdUser.email,
-      phone: createdUser.phone,
-      role: createdUser.role,
-      createdAt: new Date().toISOString(),
-      status: 'active',
+private createRoleProfile(createdUser: User): Observable<any> {
+  if (createdUser.role === 'agent') {
+    const agent: Agent = {
+      id: `AGT-${Date.now()}`,
+      userId: createdUser.id!,
+      licenseNumber: `LIC-${Math.floor(100000 + Math.random() * 900000)}`,
+      commissionRate: 10,
+      assignedCustomers: [],
+      totalPoliciesSold: 0,
+      sales: [],
+      commissions: [],
+      communicationLogs: [],
     };
 
-    return this.http.post(`${this.baseUrl}/${endpoint}`, roleDoc);
+    return this.http.post(`${this.baseUrl}/agents`, agent);
   }
+  console.log(this.customers)
+  const customer: Customer = {
+    id: `CUST-${Date.now()}`,
+    userId: createdUser.id!,
+    nominee: '',
+    address: '',
+    dateOfBirth: '',
+    aadharNumber: '',
+    panNumber: '',
+    assignedAgent: {
+      agentId: '',
+      name: '',
+      commissionRate: 0,
+    },
+    policies: [],
+    claims: [],
+  };
+
+  return this.http.post(`${this.baseUrl}/customers`, customer);
+}
+
+  
   private async hashPassword(password: string): Promise<string> {
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
     const input = `${password}::${PEPPER}`;

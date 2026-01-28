@@ -167,7 +167,6 @@ export class PolicyManagement implements OnInit {
         ? { ...p, assignedAgentId: this.selectedAgentId, status: 'Assigned' }
         : p
     );
-
     this.adminService.updateCustomer(customer.id, {
       policies: updatedApplications
     }).subscribe(() => {

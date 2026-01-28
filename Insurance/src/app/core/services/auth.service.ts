@@ -115,22 +115,29 @@ export class AuthService {
     const checkUsername$ = this.http.get<User[]>(`${this.baseUrl}/users`, {
       params: new HttpParams().set('username', payload.username),
     });
-
     return forkJoin({ byEmail: checkEmail$, byUsername: checkUsername$ }).pipe(
       switchMap(({ byEmail, byUsername }) => {
         if (byEmail?.length) return throwError(() => new Error('Email already exists.'));
         if (byUsername?.length) return throwError(() => new Error('Username already exists.'));
+<<<<<<< HEAD
 
         // 1) hash before storing in /users
+=======
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
         return from(this.hashPassword((payload as any).password)).pipe(
           switchMap((passwordHash) => {
             const newUser: User = {
               ...payload,
               createdAt,
+<<<<<<< HEAD
               password: passwordHash, // ✅ hashed stored in users
             } as User;
 
             // 2) create in /users
+=======
+              password: passwordHash,
+            } as User;
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
             return this.http.post<User>(`${this.baseUrl}/users`, newUser);
           })
         );
@@ -160,9 +167,7 @@ export class AuthService {
       // 4) auto-login same as before
       switchMap((createdUser) => {
         const safeUser = this.stripPassword(createdUser);
-
         if (!autoLogin) return of(safeUser);
-
         const token = this.createFakeJwt({
           sub: String(createdUser.id ?? ''),
           role: createdUser.role,
@@ -196,6 +201,7 @@ export class AuthService {
     return Math.floor(Date.now() / 1000) < exp;
   }
 
+<<<<<<< HEAD
   // ---------- NEW: create role profile ----------
   private createRoleProfile(createdUser: User): Observable<any> {
     const endpoint = createdUser.role === 'agent' ? 'agents' : 'customers';
@@ -216,6 +222,8 @@ export class AuthService {
   }
 
   // ---------- Password Hashing (Frontend) ----------
+=======
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
   private async hashPassword(password: string): Promise<string> {
     const PEPPER = 'INSURANCE_PORTAL_DEMO';
     const input = `${password}::${PEPPER}`;
@@ -231,7 +239,6 @@ export class AuthService {
       .join('');
   }
 
-  // ---------- Helpers ----------
   private stripPassword(u: User): AuthSession['user'] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...safe } = u as any;

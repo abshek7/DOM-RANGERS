@@ -1,4 +1,8 @@
+<<<<<<< HEAD
  export type UserRole = 'admin' | 'customer' | 'agent';
+=======
+export type UserRole = 'admin' | 'customer' | 'agent';
+>>>>>>> d517592a8a6cc022f2d83ec9ca6d4d1b11855d92
 
 export interface User {
   id?: number;
@@ -15,4 +19,9 @@ export interface User {
 export interface AuthSession {
   token: string;
   user: Omit<User, 'password'>;
+}
+
+export interface AuthSession {
+  user: User;
+  token: string;
 }

@@ -1,0 +1,144 @@
+<div class="space-y-8 sm:space-y-10">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Agent Dashboard</h1>
+      <p class="text-sm sm:text-base text-slate-500">Overview of your performance & activity</p>
+    </div>
+  </div>
+
+  @if (agentService.isLoading()) {
+
+  <div class="flex flex-col items-center justify-center gap-3 py-12 text-slate-500">
+    <lucide-icon [name]="LoaderCircle" class="w-8 h-8 text-indigo-600 animate-spin" />
+    <p class="text-sm font-medium">Loading agent dashboard...</p>
+  </div>
+
+  } @else if (agentService.agent()) {
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div
+      class="rounded-xl p-5 sm:p-6 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white shadow"
+    >
+      <p class="text-xs sm:text-sm opacity-80">Total Sales</p>
+      <p class="text-2xl sm:text-3xl font-bold mt-2">₹{{ agentService.totalSalesAmount() }}</p>
+    </div>
+
+    <div class="rounded-xl p-5 sm:p-6 bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow">
+      <p class="text-xs sm:text-sm opacity-80">Policies Sold</p>
+      <p class="text-2xl sm:text-3xl font-bold mt-2">
+        {{ agentService.totalPoliciesSold() }}
+      </p>
+    </div>
+
+    <div
+      class="rounded-xl p-5 sm:p-6 bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow"
+    >
+      <p class="text-xs sm:text-sm opacity-80">Commission Earned</p>
+      <p class="text-2xl sm:text-3xl font-bold mt-2">₹{{ agentService.earnedCommission() }}</p>
+    </div>
+
+    <div
+      class="rounded-xl p-5 sm:p-6 bg-gradient-to-br from-amber-400 to-yellow-500 text-white shadow"
+    >
+      <p class="text-xs sm:text-sm opacity-80">Pending Commission</p>
+      <p class="text-2xl sm:text-3xl font-bold mt-2">₹{{ agentService.pendingCommission() }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="bg-white rounded-xl shadow-sm border p-5 sm:p-6">
+      <h2 class="text-base sm:text-lg font-semibold mb-4 text-slate-800">Agent Profile</h2>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-slate-400">License</span>
+          <span class="font-semibold">
+            {{ agentService.licenseNumber() }}
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-slate-400">Commission Rate</span>
+          <span class="font-semibold"> {{ agentService.commissionRate() }}% </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-slate-400">Assigned Customers</span>
+          <span class="font-semibold">
+            {{ agentService.assignedCustomersCount() }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="lg:col-span-2 bg-white rounded-xl shadow-sm border p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <div>
+        <h2 class="text-base sm:text-lg font-semibold text-slate-800">Assigned Claims</h2>
+        <p class="text-sm text-slate-500">Claims that require your attention</p>
+      </div>
+
+      <div class="text-4xl sm:text-5xl font-bold text-indigo-600">
+        {{ claimsService.claims().length }}
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border p-5 sm:p-6">
+    <h2 class="text-base sm:text-lg font-semibold mb-4 text-slate-800">Recent Sales</h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-[600px] w-full text-sm">
+        <thead class="bg-slate-50 text-slate-600">
+          <tr>
+            <th class="px-4 py-3 text-left">Policy</th>
+            <th class="px-4 py-3 text-left">Customer</th>
+            <th class="px-4 py-3 text-left">Premium</th>
+            <th class="px-4 py-3 text-left">Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (sale of agentService.recentSales(); track sale.policyId) {
+          <tr class="border-t hover:bg-slate-50">
+            <td class="px-4 py-3 font-medium">
+              {{ sale.policyId }}
+            </td>
+            <td class="px-4 py-3">
+              {{ sale.customerId }}
+            </td>
+            <td class="px-4 py-3">₹{{ sale.premium }}</td>
+            <td class="px-4 py-3">
+              {{ sale.soldAt }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border p-5 sm:p-6">
+    <h2 class="text-base sm:text-lg font-semibold mb-4 text-slate-800">Recent Communications</h2>
+
+    <div class="space-y-5">
+      @for (log of agentService.recentCommunications(); track log.date) {
+      <div class="flex gap-4">
+        <div class="w-2 h-2 mt-2 rounded-full bg-indigo-500"></div>
+
+        <div>
+          <p class="text-sm text-slate-800">
+            <b>{{ log.customerId }}</b> — {{ log.message }}
+          </p>
+          <p class="text-xs text-slate-400 mt-1">
+            {{ log.date }}
+          </p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  }
+</div>

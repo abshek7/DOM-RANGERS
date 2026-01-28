@@ -1,0 +1,13 @@
+@if (customer(); as c) {
+<div class="bg-white p-6 rounded shadow max-w-xl">
+  <h2 class="text-xl font-bold mb-4">Customer ID: {{ c.id }}</h2>
+
+  <p><b>Address:</b> {{ c.address }}</p>
+  <p><b>Nominee:</b> {{ c.nominee | titlecase }}</p>
+  <p><b>Policy Count:</b> {{ c.policies.length || 0 }}</p>
+
+  <button class="mt-6 text-blue-600 hover:underline" (click)="goBack()">Back to Customers</button>
+</div>
+} @else {
+<p class="text-gray-500">Loading customer details...</p>
+}

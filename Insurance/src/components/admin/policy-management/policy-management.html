@@ -1,0 +1,103 @@
+<div class="p-6">
+
+  <div class="flex gap-4 mb-6">
+    <button class="px-4 py-2 rounded border"
+            (click)="activeTab='policies'">
+      Policies
+    </button>
+    <button class="px-4 py-2 rounded border"
+            (click)="activeTab='requests'">
+      Policy Requests
+    </button>
+  </div>
+
+  @if (activeTab === 'policies') {
+
+    <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 border-b">
+          <tr>
+            <th class="p-4">ID</th>
+            <th class="p-4">Name</th>
+            <th class="p-4">Type</th>
+            <th class="p-4">Premium</th>
+            <th class="p-4">Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(p of policies; track $index) {
+            <tr class="border-b">
+              <td class="p-4">{{ p.id }}</td>
+              <td class="p-4">{{ p.name }}</td>
+              <td class="p-4">{{ p.type }}</td>
+              <td class="p-4">₹{{ p.premium }}</td>
+              <td class="p-4">₹{{ p.coverage }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+
+  @if (activeTab === 'requests') {
+
+    <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 border-b">
+          <tr>
+            <th class="p-4">Customer</th>
+            <th class="p-4">Policy</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Agent</th>
+            <th class="p-4 text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for(r of policyApplications(); track $index) {
+            <tr class="border-b">
+              <td class="p-4">{{ r.customerId }}</td>
+              <td class="p-4">{{ r.policyId }}</td>
+              <td class="p-4">{{ r.status }}</td>
+              <td class="p-4">{{ r.assignedAgentId || '-' }}</td>
+              <td class="p-4 text-center">
+                <button class="px-3 py-1 bg-indigo-600 text-white rounded"
+                        (click)="openAssign(r)">
+                  Assign Agent
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+
+</div>
+
+@if (showAssignModal) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md">
+
+      <h3 class="text-lg font-semibold mb-4">Assign Agent</h3>
+
+      <select class="border p-2 rounded w-full"
+              [(ngModel)]="selectedAgentId">
+        <option value="">Select Agent</option>
+        @for(a of agents; track $index) {
+          <option [value]="a.id">{{ a.id }}</option>
+        }
+      </select>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button class="px-4 py-2 border rounded"
+                (click)="closeAssign()">Cancel</button>
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded"
+                (click)="assignAgent()">Assign</button>
+      </div>
+
+    </div>
+  </div>
+}

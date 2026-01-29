@@ -98,7 +98,7 @@ export const routes: Routes = [
       { path: 'agent-customers', component: AgentCustomers },
       { path: 'agent-customers/:id', component: AgentCustomerDetails },
       { path: 'agent-policies', component: AgentPolicies },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: '', redirectTo: 'agent-dashboard', pathMatch: 'full' }
     ]
   },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent) },

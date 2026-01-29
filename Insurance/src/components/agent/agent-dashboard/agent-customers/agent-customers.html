@@ -1,79 +1,92 @@
-<h2 class="text-2xl font-bold mb-6 text-gray-800">Customers</h2>
+<h2 class="text-2xl font-bold mb-6 text-slate-800">Customers</h2>
 
-@if (customersService.isLoading()) {
-<div class="flex flex-col items-center justify-center gap-3 py-12 text-gray-400">
-  <lucide-icon [name]="LoaderCircle" class="w-7 h-7 text-indigo-600 animate-spin" />
-  <p class="text-sm font-medium">Loading customers...</p>
-</div>
-} @else if (customersService.customers().length === 0) {
-<div class="text-center text-gray-400 py-12">No customers found.</div>
-} @else { @for (item of customersService.customers(); track item.customer.id) {
-<div class="bg-white rounded-2xl border border-gray-200 p-6 mb-5 hover:shadow-lg transition">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <div
-        class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg"
-      >
-        {{ item.user?.firstName?.[0] | uppercase }}
-        {{ item.user?.lastName?.[0] | uppercase }}
+@if (!assignedCustomers.length) {
+  <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+    <p class="text-sm font-medium">No customers assigned yet</p>
+  </div>
+}
+
+@else {
+  @for (customer of assignedCustomers; track customer.id) {
+    <div
+      class="bg-white rounded-2xl border border-slate-200 p-6 mb-6 transition hover:shadow-lg"
+    >
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg"
+          >
+            {{ customer.user?.firstName?.[0] | uppercase }}
+            {{ customer.user?.lastName?.[0] | uppercase }}
+          </div>
+
+          <div>
+            <p class="text-lg font-semibold text-slate-900">
+              {{ customer.user?.firstName | titlecase }}
+              {{ customer.user?.lastName | titlecase }}
+            </p>
+
+            <p class="text-sm text-slate-500 flex items-center gap-1">
+              <lucide-icon [name]="User" class="w-4 h-4" />
+              {{ customer.id }}
+            </p>
+          </div>
+        </div>
+
+        <span
+          class="px-3 py-1 text-xs font-medium rounded-full bg-indigo-50 text-indigo-700"
+        >
+          Assigned
+        </span>
       </div>
 
-      <div>
-        <p class="text-lg font-semibold text-gray-900">
-          {{ item.user?.firstName | titlecase }}
-          {{ item.user?.lastName | titlecase }}
-        </p>
+      <div class="border-t border-slate-100 my-4"></div>
 
-        <p class="text-sm text-gray-500 flex items-center gap-1">
-          <lucide-icon [name]="User" class="w-4 h-4" />
-          Customer ID: {{ item.customer.id }}
-        </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div class="flex items-center gap-2 text-slate-600">
+          <lucide-icon [name]="Mail" class="w-4 h-4 text-slate-400" />
+          {{ customer.user?.email | lowercase }}
+        </div>
+
+        <div class="flex items-center gap-2 text-slate-600">
+          <lucide-icon [name]="Phone" class="w-4 h-4 text-slate-400" />
+          {{ customer.user?.phone || 'Not provided' }}
+        </div>
+
+        <div class="flex items-center gap-2 text-slate-600 sm:col-span-2">
+          <lucide-icon [name]="MapPin" class="w-4 h-4 text-slate-400" />
+          {{ customer.address || 'Address not provided' }}
+        </div>
+
+        <div class="sm:col-span-2 text-slate-600">
+          <span class="font-semibold">Nominee:</span>
+          {{ customer.nominee | titlecase }}
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-slate-500">
+          Policies:
+          <span class="font-semibold text-slate-700">
+            {{ customer.policies?.length || 0 }}
+          </span>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            class="text-sm px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+            (click)="viewDetails(customer.id)"
+          >
+            View Details
+          </button>
+
+          <button
+            class="text-sm px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          >
+            Manage
+          </button>
+        </div>
       </div>
     </div>
-
-    @if (item.customer.assignedAgent.name) {
-    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
-      Agent: {{ item.customer.assignedAgent.name | titlecase }}
-    </span>
-    }
-  </div>
-
-  <div class="border-t border-gray-100 my-4"></div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-    <div class="flex items-center gap-2 text-gray-600">
-      <lucide-icon [name]="Mail" class="w-4 h-4 text-gray-400" />
-      {{ item.user?.email | lowercase }}
-    </div>
-
-    <div class="flex items-center gap-2 text-gray-600">
-      <lucide-icon [name]="Phone" class="w-4 h-4 text-gray-400" />
-      {{ item.user?.phone || 'Not provided' }}
-    </div>
-
-    <div class="flex items-center gap-2 text-gray-600 sm:col-span-2">
-      <lucide-icon [name]="MapPin" class="w-4 h-4 text-gray-400" />
-      {{ item.customer.address || 'Address not provided' }}
-    </div>
-
-    <div class="sm:col-span-2 text-gray-600">
-      <b>Nominee:</b> {{ item.customer.nominee | titlecase }}
-    </div>
-  </div>
-
-  <div class="flex justify-end gap-3 mt-6">
-    <button
-      class="text-sm px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
-      (click)="viewDetails(item.customer.id)"
-    >
-      View Details
-    </button>
-
-    <button
-      class="text-sm px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
-    >
-      Manage
-    </button>
-  </div>
-</div>
-} }
+  }
+}

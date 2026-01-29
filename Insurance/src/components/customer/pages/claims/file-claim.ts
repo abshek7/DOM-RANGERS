@@ -14,7 +14,7 @@ import { AuthService } from '../../../../app/core/services/auth.service';
   templateUrl: './file-claim.html'
 })
 export class FileClaimComponent implements OnInit {
-  customer: Customer | null = null;
+  customer: any| null = null;
   loading = true;
   activePolicies: any[] = [];
   selectedFiles: string[] = [];
@@ -26,7 +26,7 @@ export class FileClaimComponent implements OnInit {
     amount: 0,
     description: ''
   };
-
+  currentPolicy:any;
   claimTypes = ['Health', 'Life', 'Vehicle', 'Travel', 'Home'];
 
   private auth = inject(AuthService);
@@ -56,7 +56,9 @@ export class FileClaimComponent implements OnInit {
       next: (customers) => {
         this.customer = customers.find(c => c.userId === userId) || null;
         this.activePolicies = this.customer?.policies || [];
+        
         this.loading = false;
+        
         this.cdr.detectChanges();
       },
       error: () => {
@@ -65,7 +67,7 @@ export class FileClaimComponent implements OnInit {
       }
     });
   }
-
+  
   onFileSelected(event: any): void {
     const files = event.target.files;
     if (!files) return;
@@ -73,34 +75,43 @@ export class FileClaimComponent implements OnInit {
     this.selectedFiles = Array.from(files).map((f: any) => f.name);
     this.cdr.detectChanges();
   }
-
+ 
   onSubmit(): void {
-    if (!this.customer || !this.formData.policyId || !this.formData.amount) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    const newClaim: any = {
-      id: `CLM-${Date.now()}`,
-      customerId: this.customer.id,
-      policyId: this.formData.policyId,
-      type: this.formData.type,
-      amount: this.formData.amount,
-      date: this.formData.date,
-      description: this.formData.description,
-      documents: this.selectedFiles,
-      assignedAgent: {
-        agentId: this.customer.assignedAgent.agentId,
-        name: this.customer.assignedAgent.name,
-        commissionRate: this.customer.assignedAgent.commissionRate
-      }
-    };
-    this.claimService.fileClaim(newClaim).subscribe({
-      next: () => {
-        alert('Claim submitted successfully. An agent will review it shortly.');
-        this.router.navigate(['/customer/claims']);
-      },
-      error: () => alert('Failed to submit claim. Please try again.')
-    });
+  if (!this.customer || !this.formData.policyId || !this.formData.amount) {
+    alert('Please fill in all required fields');
+    return;
   }
+
+  const selectedPolicy = this.customer.policies.find(
+    (p:any) => p.policyId === this.formData.policyId
+  );
+
+  if (!selectedPolicy || !selectedPolicy.assignedAgentId) {
+    alert('No agent assigned to this policy yet.');
+    return;
+  }
+  const newClaim: any = {
+    id: `CLM-${Date.now()}`,
+    customerId: this.customer.id,
+    policyId: this.formData.policyId,
+    type: this.formData.type,
+    amount: this.formData.amount,
+    date: this.formData.date,
+    description: this.formData.description,
+    documents: this.selectedFiles,
+    status: 'pending',
+    assignedAgent: {
+      agentId: selectedPolicy.assignedAgentId
+    }
+  };
+
+  this.claimService.fileClaim(newClaim).subscribe({
+    next: () => {
+      alert('Claim submitted successfully. An agent will review it shortly.');
+      this.router.navigate(['/customer/claims']);
+    },
+    error: () => alert('Failed to submit claim. Please try again.')
+  });
+}
+
 }

@@ -26,20 +26,19 @@ export class ClaimsService {
       next: (agents) => {
         const agent = agents.find(a => a.userId === userId);
         this.currentAgentId = agent?.id ?? null;
-        this.loadClaims(this.currentAgentId);
+        this.loadClaims();
       }
     });
   }
 
-  loadClaims(id:any): void {
+  loadClaims(): void {
     this.loadingSignal.set(true);
 
     this.http.get<Claims[]>(`${this.baseUrl}/claims`).subscribe({
       next: (claims) => {
-        const filtered = id
-          ? claims.filter(c => c.assignedAgent?.agentId === id)
+        const filtered = this.currentAgentId
+          ? claims.filter(c => c.assignedAgent?.agentId === this.currentAgentId)
           : claims;
-
         this.claimsSignal.set(filtered);
         this.loadingSignal.set(false);
       },

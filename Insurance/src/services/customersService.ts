@@ -62,7 +62,7 @@ updateCustomer(customerId: string, payload: any) {
         customer,
         user: users.find(u => u.id === customer.userId),
       }));
-
+      console.log('Loaded Customers for Agent:', agentId, merged);
       this.customers.set(merged);
       this.isLoading.set(false);
     },

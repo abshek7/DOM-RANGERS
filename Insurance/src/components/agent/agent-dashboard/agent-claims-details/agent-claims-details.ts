@@ -26,7 +26,7 @@ export class AgentClaimsDetails implements OnInit {
     if (!id) return;
 
     this.claimId = id;
-    this.claimsService.loadClaims(this.claimsService['currentAgentId']);
+    this.claimsService.loadClaims();
   }
 
   update(status: Claims['status']): void {
@@ -34,6 +34,7 @@ export class AgentClaimsDetails implements OnInit {
     if (!current) return;
 
     this.claimsService.updateStatus(current.id, status).subscribe();
+    this.goBack();
   }
   goBack(): void {
     this.router.navigate(['/agent/agent-claims']);

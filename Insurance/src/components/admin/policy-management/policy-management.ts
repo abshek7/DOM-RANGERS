@@ -137,15 +137,20 @@ export class PolicyManagement implements OnInit {
   }
 
   policyApplications() {
-    return this.customers.flatMap(c =>
-      (c.policies || []).map((p:any) => ({
+  return this.customers.flatMap(c =>
+    (c.policies || [])
+      .filter((p: any) =>
+        !p.assignedAgentId || p.status !== 'Assigned'
+      )
+      .map((p: any) => ({
         customerId: c.id,
         policyId: p.policyId,
         status: p.status,
-        assignedAgentId: p.assignedAgentId
+        assignedAgentId: p.assignedAgentId || null
       }))
-    );
-  }
+  );
+}
+
 
   openAssign(app:any) {
     this.selectedApplication = app;
@@ -160,20 +165,76 @@ export class PolicyManagement implements OnInit {
   }
 
   assignAgent() {
-    const customer = this.customers.find(c => c.id === this.selectedApplication.customerId);
+  const customer = this.customers.find(
+    c => c.id === this.selectedApplication.customerId
+  );
+  if (!customer) return;
 
-    const updatedApplications = customer.policies.map((p:any) =>
-      p.policyId === this.selectedApplication.policyId
-        ? { ...p, assignedAgentId: this.selectedAgentId, status: 'Assigned' }
-        : p
-    );
-    this.adminService.updateCustomer(customer.id, {
-      policies: updatedApplications
-    }).subscribe(() => {
+  const agent = this.agents.find(
+    a => a.id === this.selectedAgentId
+  );
+  if (!agent) return;
+
+  const policy = customer.policies.find(
+    (p: any) => p.policyId === this.selectedApplication.policyId
+  );
+  if (!policy) return;
+  const updatedPolicies = customer.policies.map((p: any) =>
+    p.policyId === policy.policyId
+      ? {
+          ...p,
+          assignedAgentId: agent.id,
+          status: 'Assigned'
+        }
+      : p
+  );
+  const updatedAssignedCustomers = agent.assignedCustomers?.includes(customer.id)
+    ? agent.assignedCustomers
+    : [...(agent.assignedCustomers || []), customer.id];
+  const saleEntry = {
+    policyId: policy.policyId,
+    customerId: customer.id,
+    premium: policy.premium,
+    soldAt: new Date().toISOString()
+  };
+
+  const updatedSales = [
+    ...(agent.sales || []),
+    saleEntry
+  ];
+  const commissionAmount =
+    policy.premium * (agent.commissionRate || 0);
+
+  const commissionEntry = {
+    policyId: policy.policyId,
+    claimId: null,
+    amount: commissionAmount,
+    status: 'pending' as 'pending'
+  };
+
+  const updatedCommissions = [
+    ...(agent.commissions || []),
+    commissionEntry
+  ];
+
+  const updatedAgent = {
+    assignedCustomers: updatedAssignedCustomers,
+    sales: updatedSales,
+    commissions: updatedCommissions,
+    totalPoliciesSold: (agent.totalPoliciesSold || 0) + 1
+  };
+
+  this.adminService.updateCustomer(customer.id, {
+    policies: updatedPolicies
+  }).subscribe(() => {
+    this.adminService.updateAgent(agent.id, updatedAgent).subscribe(() => {
       this.loadCustomers();
+      this.loadAgents();
       this.closeAssign();
+      this.c.detectChanges();
     });
-    this.c.detectChanges();
-  }
+  });
+}
+
 
 }

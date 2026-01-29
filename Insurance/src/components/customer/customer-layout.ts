@@ -17,7 +17,7 @@ interface MenuItem {
     templateUrl: './customer-layout.html'
 })
 export class CustomerLayoutComponent implements OnInit {
-    customerName: string = 'Insurance User';
+    customerName: string = '';
     customerId: string = '';
     showProfileMenu: boolean = false;
 
@@ -36,9 +36,16 @@ export class CustomerLayoutComponent implements OnInit {
     ngOnInit(): void {
         this.adminService.getCustomers().subscribe((customers) => {
             const customer = customers.find(c => c.userId === this.authService.user?.id);
-            console.log(customer);
             if (customer) {
                 this.customerId = customer.id;
+                
+            }
+            this.ChangeDetectorRef.detectChanges();
+        });
+        this.adminService.getUsers().subscribe((users) => {
+            const user = users.find(u => u.id === this.authService.user?.id);
+            if (user) {
+                this.customerName = user.firstName + ' ' + user.lastName;
             }
             this.ChangeDetectorRef.detectChanges();
         });

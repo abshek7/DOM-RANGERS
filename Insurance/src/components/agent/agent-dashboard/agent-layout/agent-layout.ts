@@ -31,6 +31,7 @@ export class AgentLayout {
   // readonly Settings = Settings;
   readonly LogOut = LogOut;
   currentAgent :any;
+  username = signal('');
   private auth = inject(AuthService);
   private adminService = inject(AdminService);
   private ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -39,7 +40,7 @@ export class AgentLayout {
   ngOnInit(): void {
    this.adminService.getAgents().subscribe((users:Agent[]) => {
         this.currentAgent = users.find((u:any) => u.userId==this.auth.user?.id);
-        console.log(this.currentAgent);
+        this.username.set(this.auth.user?.firstName + ' ' + this.auth.user?.lastName);
         this.ChangeDetectorRef.detectChanges();
       });}
   logout() {

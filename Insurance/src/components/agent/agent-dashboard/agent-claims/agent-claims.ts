@@ -14,6 +14,6 @@ export class AgentClaims implements OnInit {
   constructor(public claimsService: ClaimsService,public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.claimsService.loadClaims(this.authService.user?.id || '');
+    this.claimsService.loadClaims();
   }
 }

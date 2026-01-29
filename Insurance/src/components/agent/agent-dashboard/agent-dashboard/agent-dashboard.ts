@@ -1,4 +1,4 @@
-import { Component, OnInit, effect } from '@angular/core';
+import { ChangeDetectorRef,Component, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../../app/core/services/auth.service';
@@ -22,12 +22,14 @@ export class AgentDashboard implements OnInit {
   readonly LoaderCircle = LoaderCircle;
   currentAgent :any;
   usersdata:any;
+  allPolicies: any[] = [];
   constructor(
     private http: HttpClient,
     public agentService: AgentService,
     public claimsService: ClaimsService,
     private authService: AuthService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private ChangeDetectorRef:ChangeDetectorRef
   ) {
   }
   
@@ -36,7 +38,22 @@ export class AgentDashboard implements OnInit {
       this.currentAgent = users.filter((u:any) => u.userId==this.authService.user?.id);
     });
     this.agentService.loadAgent(this.authService.user?.id || 0);
-
+    this.loadAgentPolicies();
   }
-  
+  private loadAgentPolicies(): void {
+    this.adminService.getAgents().subscribe((agents) => {
+      const agent = agents.find(a => a.userId === this.authService.user?.id);
+      if (!agent) return;
+
+      this.adminService.getCustomers().subscribe((customers: any) => {
+        const policies = customers
+          .flatMap((c:any) => c.policies || [])
+          .filter((p:any) => p.assignedAgentId === agent.id);
+       
+        this.allPolicies = policies;
+       
+        this.ChangeDetectorRef?.detectChanges();
+      });
+    });
+  }
 }

@@ -60,12 +60,7 @@ import { AuthService } from '../../../core/services/auth.service';
             {{ loading ? 'Logging in...' : 'Login' }}
           </button>
 
-          <div class="rounded-2xl bg-slate-50 p-4 text-xs text-slate-600">
-            <div class="font-semibold text-slate-800 mb-1">Test Users</div>
-            <div>Admin: <b>admin01</b> / <b>admin123</b></div>
-            <div>Customer: <b>cust01</b> / <b>cust123</b></div>
-            <div>Agent: <b>agent01</b> / <b>agent123</b></div>
-          </div>
+          
         </form>
       </div>
     </div>

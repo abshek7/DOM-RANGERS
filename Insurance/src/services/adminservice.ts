@@ -55,5 +55,4 @@ updateCustomer(id:string, payload:any) {
 getDocuments() {
   return this.http.get<any[]>(this.const_api + '/documents');
 }
-
 }

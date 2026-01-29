@@ -14,13 +14,14 @@ import {
   CheckCircle,
   ChevronDown,
 } from 'lucide-angular';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import {  CurrencyPipe, DatePipe } from '@angular/common';
 import { PoliciesService } from '../../../../services/policiesService';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
   selector: 'agent-policies',
-  imports: [LucideAngularModule, DatePipe, CurrencyPipe],
+  imports: [LucideAngularModule, CurrencyPipe,DatePipe,FormsModule],
   templateUrl: './agent-policies.html',
 })
 export class AgentPolicies implements OnInit {
@@ -48,22 +49,35 @@ export class AgentPolicies implements OnInit {
   }
 
   private loadAgentPolicies(): void {
-    this.adminService.getAgents().subscribe((agents) => {
-      const agent = agents.find(a => a.userId === this.auth.user?.id);
-      if (!agent) return;
+  this.adminService.getAgents().subscribe((agents: any[]) => {
+    const agent = agents.find(a => a.userId === this.auth.user?.id);
+    if (!agent || !agent.sales?.length) {
+      this.allPolicies = [];
+      this.displayedPolicies = [];
+      return;
+    }
 
-      this.adminService.getCustomers().subscribe((customers: any) => {
-        const policies = customers
-          .flatMap((c:any) => c.policies || [])
-          .filter((p:any) => p.assignedAgentId === agent.id);
-        console.log('Agent Policies:', policies);
-        this.allPolicies = policies;
-        this.displayedPolicies = [...policies];
-        console.log('Displayed Policies:', this.displayedPolicies);
-        this.ChangeDetectorRef?.detectChanges();
+    const soldPolicyIds = agent.sales.map((s: any) => s.policyId);
+
+    this.adminService.getPolicies().subscribe((policies: any[]) => {
+      const assignedPolicies = policies.filter(p =>
+        soldPolicyIds.includes(p.id)
+      );
+
+      this.allPolicies = assignedPolicies.map(p => {
+        const sale = agent.sales.find((s: any) => s.policyId === p.id);
+        return {
+          ...p,
+          soldAt: sale?.soldAt,
+          customerId: sale?.customerId,
+          soldPremium: sale?.premium
+        };
       });
+      this.displayedPolicies = [...this.allPolicies];
+      this.ChangeDetectorRef.detectChanges();
     });
-  }
+  });
+}
 
   onSelectPolicy(policyId: string): void {
     if (policyId === 'all') {
@@ -72,7 +86,7 @@ export class AgentPolicies implements OnInit {
       return;
     }
 
-    const policy = this.allPolicies.find(p => p.policyId === policyId) ?? null;
+    const policy = this.allPolicies.find(p => p.id === policyId) ?? null;
     this.selectedPolicy = policy;
     this.displayedPolicies = policy ? [policy] : [];
   }

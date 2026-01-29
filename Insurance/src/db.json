@@ -21,6 +21,17 @@
       "role": "agent",
       "password": "da91249e10abb25d63e541919d36208d2dca15454bbfdb5c231d8055850e6fbb",
       "createdAt": "2026-01-28"
+    },
+    {
+      "id": "EhzmNhF",
+      "firstName": "anand",
+      "lastName": "ch",
+      "username": "anand12",
+      "email": "anand@gmail.com",
+      "phone": "7895641255",
+      "role": "customer",
+      "password": "b84294a2de1b4ecd8449cb45ab646f3156b4153266648e4a579353dc1fb9ce49",
+      "createdAt": "2026-01-29"
     }
   ],
   "customers": [
@@ -91,6 +102,57 @@
       "claims": [
         "CLM-201"
       ],
+      "kycStatus": "Verified"
+    },
+    {
+      "id": "CUST-1769659126662",
+      "userId": "EhzmNhF",
+      "nominee": "rohith",
+      "address": "",
+      "dateOfBirth": "2026-01-01",
+      "aadharNumber": "852852852852",
+      "panNumber": "hbhsbajcsdac",
+      "assignedAgent": {
+        "agentId": "",
+        "name": "",
+        "commissionRate": 0
+      },
+      "policies": [
+        {
+          "policyId": "POL-201",
+          "policyName": "Health Secure Plus",
+          "premium": 6500,
+          "coverage": 700000,
+          "duration": 1,
+          "status": "Assigned",
+          "renewalDate": "2027-01-29T04:06:13.031Z",
+          "payments": [],
+          "assignedAgentId": "AGT-1769619314027"
+        },
+        {
+          "policyId": "POL-202",
+          "policyName": "Life Shield Premium",
+          "premium": 12000,
+          "coverage": 1500000,
+          "duration": 20,
+          "status": "Assigned",
+          "renewalDate": "2046-01-24T19:02:46.909Z",
+          "payments": [],
+          "assignedAgentId": "AGT-1769619314027"
+        },
+        {
+          "policyId": "POL-203",
+          "policyName": "Motor Guard Elite",
+          "premium": 4500,
+          "coverage": 500000,
+          "duration": 1,
+          "status": "Assigned",
+          "renewalDate": "2027-01-29T19:02:59.539Z",
+          "payments": [],
+          "assignedAgentId": "AGT-1769619314027"
+        }
+      ],
+      "claims": [],
       "kycStatus": "Verified"
     }
   ],
@@ -171,44 +233,96 @@
   ],
   "claims": [
     {
-      "id": "CLM-201",
+      "id": "CLM-1769659649392",
+      "customerId": "CUST-1769659126662",
       "policyId": "POL-201",
-      "customerId": "CUST-101",
-      "type": "Hospitalization",
-      "amount": 32000,
-      "date": "2025-01-20",
-      "status": "approved",
-      "description": "Viral infection treatment and tests.",
+      "type": "Health",
+      "amount": 500000,
+      "date": "2026-01-29",
+      "description": "",
+      "documents": [
+        "AIcertificate.png"
+      ],
       "assignedAgent": {
-        "agentId": "AGT-101",
-        "name": "Abhishek Sharma"
+        "agentId": "",
+        "name": "",
+        "commissionRate": 0
       },
-      "remarks": "Bills under verification.",
+      "status": "approved",
       "remark": ""
     },
     {
-      "id": "CLM-1641",
-      "customerId": "CUST-101",
+      "id": "CLM-1769708110619",
+      "customerId": "CUST-1769659126662",
       "policyId": "POL-201",
       "type": "Health",
-      "amount": 5000000,
-      "date": "2026-01-27",
-      "description": "accident",
+      "amount": 2,
+      "date": "2026-01-29",
+      "description": "xrdcgtfvhbj",
+      "documents": [
+        "claim.png"
+      ],
+      "assignedAgent": {
+        "agentId": "",
+        "name": "",
+        "commissionRate": 0
+      },
       "status": "rejected",
       "remark": ""
     },
     {
-      "id": "CLM-2062",
-      "customerId": "CUST-101",
-      "policyId": "POL-202",
+      "id": "CLM-1769708878695",
+      "customerId": "CUST-1769659126662",
+      "policyId": "POL-201",
       "type": "Health",
-      "amount": 56000,
-      "date": "2026-01-27",
-      "description": "life",
-      "status": "approved",
+      "amount": 45632,
+      "date": "2026-01-29",
+      "description": "",
       "documents": [
-        "models.txt"
+        "policy.png"
       ],
+      "assignedAgent": {
+        "agentId": "",
+        "name": "",
+        "commissionRate": 0
+      },
+      "status": "approved",
+      "remark": ""
+    },
+    {
+      "id": "CLM-1769709090630",
+      "customerId": "CUST-1769659126662",
+      "policyId": "POL-201",
+      "type": "Health",
+      "amount": 3,
+      "date": "2026-01-29",
+      "description": "",
+      "documents": [
+        "support.png"
+      ],
+      "assignedAgent": {
+        "agentId": "",
+        "name": "",
+        "commissionRate": 0
+      },
+      "status": "rejected",
+      "remark": ""
+    },
+    {
+      "id": "CLM-1769709992412",
+      "customerId": "CUST-1769659126662",
+      "policyId": "POL-201",
+      "type": "Health",
+      "amount": 52220,
+      "date": "2026-01-29",
+      "description": "",
+      "documents": [
+        "support.png"
+      ],
+      "status": "approved",
+      "assignedAgent": {
+        "agentId": "AGT-1769619314027"
+      },
       "remark": ""
     }
   ],
@@ -217,7 +331,7 @@
       "id": "AGT-101",
       "userId": 3,
       "licenseNumber": "LIC-88991",
-      "commissionRate": 0.05,
+      "commissionRate": 22,
       "assignedCustomers": [
         "CUST-101"
       ],
@@ -251,10 +365,50 @@
       "userId": "U2WuNCE",
       "licenseNumber": "LIC-570680",
       "commissionRate": 10,
-      "assignedCustomers": [],
-      "totalPoliciesSold": 0,
-      "sales": [],
-      "commissions": [],
+      "assignedCustomers": [
+        "CUST-1769659126662"
+      ],
+      "totalPoliciesSold": 3,
+      "sales": [
+        {
+          "policyId": "POL-201",
+          "customerId": "CUST-1769659126662",
+          "premium": 6500,
+          "soldAt": "2026-01-29T19:23:08.998Z"
+        },
+        {
+          "policyId": "POL-202",
+          "customerId": "CUST-1769659126662",
+          "premium": 12000,
+          "soldAt": "2026-01-29T19:23:12.729Z"
+        },
+        {
+          "policyId": "POL-203",
+          "customerId": "CUST-1769659126662",
+          "premium": 4500,
+          "soldAt": "2026-01-29T19:23:16.680Z"
+        }
+      ],
+      "commissions": [
+        {
+          "policyId": "POL-201",
+          "claimId": null,
+          "amount": 65000,
+          "status": "pending"
+        },
+        {
+          "policyId": "POL-202",
+          "claimId": null,
+          "amount": 120000,
+          "status": "pending"
+        },
+        {
+          "policyId": "POL-203",
+          "claimId": null,
+          "amount": 45000,
+          "status": "pending"
+        }
+      ],
       "communicationLogs": []
     }
   ],

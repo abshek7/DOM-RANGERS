@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private customerService: CustomerService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const user = this.auth.user;

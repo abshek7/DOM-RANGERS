@@ -36,7 +36,7 @@ export class FileClaimComponent implements OnInit {
     private claimService: ClaimService,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCustomerData();
@@ -66,6 +66,20 @@ export class FileClaimComponent implements OnInit {
     });
   }
 
+  onPolicyChange(): void {
+    const selectedPolicy = this.activePolicies.find(p => p.policyId === this.formData.policyId);
+    if (selectedPolicy) {
+      // Auto-fill type based on policy type (simple matching)
+      if (selectedPolicy.policyName.toLowerCase().includes('health')) this.formData.type = 'Health';
+      else if (selectedPolicy.policyName.toLowerCase().includes('life')) this.formData.type = 'Life';
+      else if (selectedPolicy.policyName.toLowerCase().includes('vehicle') || selectedPolicy.policyName.toLowerCase().includes('motor')) this.formData.type = 'Vehicle';
+      else if (selectedPolicy.policyName.toLowerCase().includes('travel')) this.formData.type = 'Travel';
+      else if (selectedPolicy.policyName.toLowerCase().includes('home')) this.formData.type = 'Home';
+
+      // Reset amount validation if needed
+    }
+  }
+
   onFileSelected(event: any): void {
     const files = event.target.files;
     if (!files) return;
@@ -77,6 +91,12 @@ export class FileClaimComponent implements OnInit {
   onSubmit(): void {
     if (!this.customer || !this.formData.policyId || !this.formData.amount) {
       alert('Please fill in all required fields');
+      return;
+    }
+
+    const selectedPolicy = this.activePolicies.find(p => p.policyId === this.formData.policyId);
+    if (selectedPolicy && this.formData.amount > selectedPolicy.coverage) {
+      alert(`Claim amount (₹${this.formData.amount}) cannot exceed policy coverage (₹${selectedPolicy.coverage})`);
       return;
     }
 

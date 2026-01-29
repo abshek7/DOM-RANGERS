@@ -1,4 +1,4 @@
-import { ChangeDetectorRef,Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../app/core/services/auth.service';
@@ -23,7 +23,7 @@ export class CustomerLayoutComponent implements OnInit {
 
     menuItems: MenuItem[] = [
         { label: 'Dashboard', route: '/customer/dashboard', icon: '' },
-        { label: 'Browse Policies', route: '/customer/marketplace', icon: '' },
+        { label: 'Policy Catalog', route: '/customer/policy-catalog', icon: '' },
         { label: 'My Policies', route: '/customer/my-policies', icon: '' },
         { label: 'My Claims', route: '/customer/claims', icon: '' },
         { label: 'Profile', route: '/customer/profile', icon: '' }

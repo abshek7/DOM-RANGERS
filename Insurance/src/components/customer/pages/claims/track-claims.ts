@@ -78,9 +78,9 @@ export class TrackClaimsComponent implements OnInit {
 
   getStatusClass(status: string): string {
     const s = status.toLowerCase();
-    if (s === 'approved') return 'bg-green-100 text-green-800';
-    if (s === 'pending') return 'bg-yellow-100 text-yellow-800';
-    if (s === 'rejected') return 'bg-red-100 text-red-800';
-    return 'bg-gray-100 text-gray-800';
+    if (s === 'approved') return 'bg-green-50 text-green-700';
+    if (s === 'pending') return 'bg-yellow-50 text-yellow-700';
+    if (s === 'rejected') return 'bg-red-50 text-red-700';
+    return 'bg-slate-100 text-slate-600';
   }
 }

@@ -7,12 +7,12 @@ import { PolicyService } from '../../../../services/policyservice';
 import { CustomerService } from '../../../../services/customerservice';
 import { AuthService } from '../../../../app/core/services/auth.service';
 @Component({
-    selector: 'app-marketplace',
+    selector: 'app-policy-catalog',
     standalone: true,
     imports: [CommonModule, RouterModule, FormsModule, TitleCasePipe],
-    templateUrl: './marketplace.html'
+    templateUrl: './policy-catalog.html'
 })
-export class MarketplaceComponent implements OnInit {
+export class PolicyCatalogComponent implements OnInit {
     policies: Policies[] = [];
     filteredPolicies: any[] = [];
     loading: boolean = true;
@@ -30,20 +30,20 @@ export class MarketplaceComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-  this.loadCustomerOwnedPolicies();
-  this.loadPolicies();
-}
+        this.loadCustomerOwnedPolicies();
+        this.loadPolicies();
+    }
 
-loadCustomerOwnedPolicies(): void {
-  const userId = this.authService.user?.id;
-  if (!userId) return;
+    loadCustomerOwnedPolicies(): void {
+        const userId = this.authService.user?.id;
+        if (!userId) return;
 
-  this.customerService.getCustomers().subscribe(customers => {
-    const customer = customers.find(c => c.userId === userId);
-    this.ownedPolicyIds = customer?.policies?.map(p => p.policyId) || [];
-    this.applyFilters();
-  });
-}
+        this.customerService.getCustomers().subscribe(customers => {
+            const customer = customers.find(c => c.userId === userId);
+            this.ownedPolicyIds = customer?.policies?.map(p => p.policyId) || [];
+            this.applyFilters();
+        });
+    }
 
 
     loadPolicies(): void {

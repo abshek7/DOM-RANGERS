@@ -127,9 +127,24 @@
           "customerId": "CUST-101",
           "date": "2026-01-27T19:17:00.624Z",
           "reason": ""
+        },
+        {
+          "requestId": "CAN-1769595031251",
+          "customerId": "CUST-101",
+          "reason": "malaria",
+          "status": "pending",
+          "requestedAt": "2026-01-28T10:10:31.251Z"
         }
       ],
-      "endorsementRequests": []
+      "endorsementRequests": [
+        {
+          "requestId": "END-1769595335390",
+          "customerId": "CUST-101",
+          "details": "Adress Change request",
+          "status": "pending",
+          "requestedAt": "2026-01-28T10:15:35.390Z"
+        }
+      ]
     },
     {
       "id": "POL-202",
@@ -208,6 +223,21 @@
       "documents": [
         "models.txt"
       ]
+    },
+    {
+      "id": "CLM-4996",
+      "customerId": "CUST-101",
+      "policyId": "POL-203",
+      "type": "Health",
+      "amount": 56000,
+      "date": "2026-01-28",
+      "description": "",
+      "status": "pending",
+      "documents": [],
+      "assignedAgent": {
+        "agentId": "AGT-101",
+        "name": "Abhishek Sharma"
+      }
     }
   ],
   "agents": [

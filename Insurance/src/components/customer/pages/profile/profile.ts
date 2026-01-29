@@ -9,4 +9,5 @@ import { RouterModule } from '@angular/router';
   templateUrl: './profile.html'
 })
 export class ProfileComponent {
+  
 }

@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { ClaimsService } from '../../../../services/claimsService';
 import { ClaimStatusClassPipe } from '../../../../pipes/claim-status-class.pipe';
-
+import { AuthService } from '../../../../app/core/services/auth.service';
 @Component({
   standalone: true,
   selector: 'agent-claims',
@@ -11,9 +11,9 @@ import { ClaimStatusClassPipe } from '../../../../pipes/claim-status-class.pipe'
   templateUrl: './agent-claims.html',
 })
 export class AgentClaims implements OnInit {
-  constructor(public claimsService: ClaimsService) {}
+  constructor(public claimsService: ClaimsService,public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.claimsService.loadClaims();
+    this.claimsService.loadClaims(this.authService.user?.id || '');
   }
 }

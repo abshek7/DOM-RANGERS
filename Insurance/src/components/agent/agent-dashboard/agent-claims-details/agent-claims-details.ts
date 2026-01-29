@@ -26,7 +26,7 @@ export class AgentClaimsDetails implements OnInit {
     if (!id) return;
 
     this.claimId = id;
-    this.claimsService.loadClaims();
+    this.claimsService.loadClaims(this.claimsService['currentAgentId']);
   }
 
   update(status: Claims['status']): void {

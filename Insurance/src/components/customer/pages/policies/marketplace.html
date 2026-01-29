@@ -16,7 +16,7 @@
         <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="relative group">
                 <label
-                    class="absolute -top-2 left-4 px-2 bg-white-600 text-[9px] font-black text-white uppercase tracking-widest rounded">Your
+                    class="px-2 bg-white-600 text-md font-black text-white uppercase tracking-widest rounded">Your
                     Age</label>
                 <input type="number" [(ngModel)]="age" (ngModelChange)="onFilterChange()"
                     class="w-full px-5 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-white/50 transition-all text-sm font-bold text-white outline-none">
@@ -24,7 +24,7 @@
 
             <div class="relative group">
                 <label
-                    class="absolute -top-2 left-4 px-2 bg-white-600 text-[9px] font-black text-white uppercase tracking-widest rounded">Category</label>
+                    class="px-2 bg-white-600 text-md  bg-white-600  font-black text-white uppercase tracking-widest rounded">Category</label>
                 <select [(ngModel)]="selectedType" (ngModelChange)="onFilterChange()"
                     class="w-full px-5 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-white/50 transition-all text-sm font-bold text-white outline-none cursor-pointer appearance-none">
                     <option *ngFor="let type of policyTypes" [value]="type" class="text-slate-900">
@@ -35,7 +35,7 @@
 
             <div class="relative group">
                 <label
-                    class="absolute -top-2 left-4 px-2 bg-white-600 text-[9px] font-black text-white uppercase tracking-widest rounded">Search</label>
+                    class="px-2 bg-white-600 text-md left-4  bg-white-600  font-black text-white uppercase tracking-widest rounded">Search</label>
                 <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()"
                     placeholder="Find a plan..."
                     class="w-full px-5 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:ring-2 focus:ring-white/50 transition-all text-sm font-bold text-white outline-none placeholder:text-blue-200/50">

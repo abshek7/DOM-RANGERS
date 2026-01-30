@@ -37,29 +37,46 @@ export class PolicyService {
     });
   }
 
-  submitCancellationRequest(policyId: string, request: any): Observable<Policies> {
-    return this.getPolicyById(policyId).pipe(
-      switchMap(policy => {
-        const requests: any[] = policy.cancellationRequests || [];
-        // @ts-ignore
-        requests.push(request);
-        return this.http.patch<Policies>(`${this.apiUrl}/policies/${policyId}`, {
-          cancellationRequests: requests
-        });
-      })
-    );
-  }
+ submitCancellationRequest(policyId: string, request: any) {
+  const cancellationRequest = {
+    requestId: `CAN-${Date.now()}`,
+    customerId: request.customerId,
+    reason: request.reason,
+    status: 'pending',
+    requestedAt: new Date().toISOString()
+  };
 
-  submitEndorsementRequest(policyId: string, request: any): Observable<Policies> {
-    return this.getPolicyById(policyId).pipe(
-      switchMap(policy => {
-        const requests: any[] = policy.endorsementRequests || [];
-        // @ts-ignore
-        requests.push(request);
-        return this.http.patch<Policies>(`${this.apiUrl}/policies/${policyId}`, {
-          endorsementRequests: requests
-        });
-      })
-    );
-  }
+  return this.http.get<any>(`${this.apiUrl}/policies/${policyId}`).pipe(
+    switchMap(policy => {
+      const updated = [...(policy.cancellationRequests || []), cancellationRequest];
+
+      return this.http.patch(`${this.apiUrl}/policies/${policyId}`, {
+        cancellationRequests: updated
+      });
+    })
+  );
+}
+
+ submitEndorsementRequest(policyId: string, request: any): Observable<Policies> {
+  const endorsementRequest = {
+    requestId: `END-${Date.now()}`,
+    customerId: request.customerId,
+    details: request.details,
+    status: 'pending',
+    requestedAt: new Date().toISOString()
+  };
+
+  return this.http.get<Policies>(`${this.apiUrl}/policies/${policyId}`).pipe(
+    switchMap(policy => {
+      const updatedRequests = [
+        ...(policy.endorsementRequests || []),
+        endorsementRequest
+      ];
+
+      return this.http.patch<Policies>(`${this.apiUrl}/policies/${policyId}`, {
+        endorsementRequests: updatedRequests
+      });
+    })
+  );
+}
 }

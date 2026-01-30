@@ -1,73 +1,73 @@
 <div class="max-w-7xl mx-auto space-y-8 animate-fadeIn pb-20">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-black text-slate-800 tracking-tight">My Policies</h1>
-            <p class="text-slate-500 font-medium mt-1">Manage your active and pending insurance protections.</p>
+            <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">My Policies</h1>
+            <p class="text-slate-500 text-sm mt-1">Manage your active and pending insurance protections.</p>
         </div>
-        <button routerLink="/customer/marketplace"
-            class="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-blue-600 hover:bg-slate-50 transition-all shadow-sm">
+        <button routerLink="/customer/policy-catalog"
+            class="px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-blue-600 hover:bg-slate-50 transition-all shadow-sm">
             + Add New Policy
         </button>
     </div>
 
     <div *ngIf="loading" class="grid grid-cols-1 gap-6 animate-pulse">
-        <div *ngFor="let i of [1,2,3]" class="h-40 bg-white rounded-3xl border border-slate-100"></div>
+        <div *ngFor="let i of [1,2,3]" class="h-40 bg-white rounded-xl border border-slate-200"></div>
     </div>
 
     <div *ngIf="!loading && customer && (!customer.policies || customer.policies.length === 0)"
-        class="text-center py-24 bg-white rounded-[3rem] border border-dashed border-slate-200">
-        <h3 class="text-2xl font-black text-slate-800">No policies yet</h3>
-        <p class="text-slate-500 mt-2 max-w-sm mx-auto">You haven't purchased any insurance plans yet. Explore our
+        class="text-center py-24 bg-white rounded-xl border border-dashed border-slate-200">
+        <h3 class="text-lg font-semibold text-slate-900">No policies yet</h3>
+        <p class="text-slate-500 mt-2 text-sm max-w-sm mx-auto">You haven't purchased any insurance plans yet. Explore
+            our
             catalog to get protected today.</p>
-        <button routerLink="/customer/marketplace"
-            class="mt-8 px-8 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 shadow-xl shadow-blue-100">Browse
+        <button routerLink="/customer/policy-catalog"
+            class="mt-6 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 shadow-sm transition-colors">Browse
             Policies</button>
     </div>
 
-    <div *ngIf="!loading && customer" class="grid grid-cols-1 gap-6">
+    <div *ngIf="!loading && customer" class="grid grid-cols-1 gap-4">
         <div *ngFor="let p of customer.policies"
-            class="group bg-white rounded-[2.5rem] border border-slate-200 p-8 md:p-10 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col xl:flex-row xl:items-center gap-10">
+            class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col xl:flex-row xl:items-center gap-8">
 
             <div class="flex-1">
                 <div class="flex items-center gap-4 mb-6">
-                    <h3 class="text-2xl font-black text-slate-800">{{ p.policyName }}</h3>
+                    <h3 class="text-xl font-bold text-slate-900">{{ p.policyName }}</h3>
                     <span
-                        [class]="'px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ' + getStatusClass(p.status)">
+                        [class]="'px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ' + getStatusClass(p.status)">
                         {{ p.status }}
                     </span>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
                     <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Policy
+                        <span
+                            class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Policy
                             ID</span>
-                        <span class="text-slate-900 font-bold block">{{ p.policyId }}</span>
+                        <span class="text-slate-900 font-medium block text-sm">{{ p.policyId }}</span>
                     </div>
                     <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Yearly
+                        <span
+                            class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Yearly
                             Cost</span>
-                        <span class="text-slate-900 font-bold block">₹{{ p.premium | number }}</span>
+                        <span class="text-slate-900 font-medium block text-sm">₹{{ p.premium | number }}</span>
                     </div>
                     <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Renewal
+                        <span
+                            class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Renewal
                             Due</span>
-                        <span class="text-slate-900 font-bold block">{{ p.renewalDate | date:'MMM d, y' }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Payment
-                            Status</span>
-                        <span class="text-green-600 font-black">ON TIME</span>
+                        <span class="text-slate-900 font-medium block text-sm">{{ p.renewalDate | date:'MMM d, y'
+                            }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-wrap gap-4 xl:justify-end xl:w-96">
+            <div class="flex flex-wrap gap-3 xl:justify-end xl:w-80">
                 <button (click)="openEndorsement(p.policyId)"
-                    class="px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold hover:bg-slate-200 transition-all grow text-center">
+                    class="px-5 py-2.5 bg-slate-50 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-all grow text-center border border-slate-200">
                     Request Change
                 </button>
                 <button (click)="cancelPolicy(p.policyId)"
-                    class="px-6 py-3 bg-white border border-red-200 text-red-600 rounded-2xl text-sm font-bold hover:bg-red-50 transition-all grow text-center">
+                    class="px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50 transition-all grow text-center">
                     Cancel Policy
                 </button>
             </div>
@@ -76,22 +76,24 @@
 </div>
 
 <div *ngIf="showEndorsementModal"
-    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[100] p-6 animate-fadeIn">
-    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg p-10 transform transition-all">
-        <h2 class="text-2xl font-black text-slate-800 mb-2">Request Change</h2>
-        <p class="text-slate-500 font-medium mb-8">What modifications would you like to make?</p>
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6 animate-fadeIn">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 transform transition-all border border-slate-200">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-900 mb-1">Request Change</h2>
+            <p class="text-slate-500 text-sm">What modifications would you like to make?</p>
+        </div>
 
-        <textarea [(ngModel)]="endorsementValue" rows="5"
-            class="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-800 outline-none resize-none"
+        <textarea [(ngModel)]="endorsementValue" rows="4"
+            class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm text-slate-900 outline-none resize-none placeholder:text-slate-400"
             placeholder="Describe the changes..."></textarea>
 
-        <div class="flex gap-4 mt-8">
+        <div class="flex gap-3 mt-8">
             <button (click)="submitEndorsement()" [disabled]="!endorsementValue"
-                class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 disabled:opacity-50">
+                class="flex-1 py-2.5 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 disabled:opacity-50 transition-all">
                 Submit Request
             </button>
             <button (click)="showEndorsementModal = false"
-                class="px-8 py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold hover:bg-slate-200 transition-all">
+                class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-lg font-medium text-sm hover:bg-slate-50 transition-all">
                 Cancel
             </button>
         </div>
@@ -99,23 +101,25 @@
 </div>
 
 <div *ngIf="showCancellationModal"
-    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[100] p-6 animate-fadeIn">
-    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg p-10 transform transition-all">
-        <h2 class="text-2xl font-black text-red-600 mb-2">Policy Cancellation</h2>
-        <p class="text-slate-500 font-medium mb-8">Please tell us why you're considering cancelling.</p>
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6 animate-fadeIn">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 transform transition-all border border-slate-200">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-red-600 mb-1">Policy Cancellation</h2>
+            <p class="text-slate-500 text-sm">Please tell us why you're considering cancelling.</p>
+        </div>
 
-        <textarea [(ngModel)]="cancellationReason" rows="5"
-            class="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-red-500 transition-all font-bold text-slate-800 outline-none resize-none"
+        <textarea [(ngModel)]="cancellationReason" rows="4"
+            class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm text-slate-900 outline-none resize-none placeholder:text-slate-400"
             placeholder="Your feedback..."></textarea>
 
-        <div class="flex gap-4 mt-8">
+        <div class="flex gap-3 mt-8">
             <button (click)="submitCancellation()" [disabled]="!cancellationReason"
-                class="flex-1 py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 disabled:opacity-50">
+                class="flex-1 py-2.5 bg-red-600 text-white rounded-lg font-medium text-sm hover:bg-red-700 disabled:opacity-50 transition-all">
                 Confirm Cancellation
             </button>
             <button (click)="showCancellationModal = false"
-                class="px-8 py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold hover:bg-slate-200 transition-all">
-                Keep Protected
+                class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-lg font-medium text-sm hover:bg-slate-50 transition-all">
+                Cancel
             </button>
         </div>
     </div>

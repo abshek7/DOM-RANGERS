@@ -7,9 +7,7 @@
         <p class="text-sm text-slate-500">Customer information</p>
       </div>
 
-      <button
-        *ngIf="customer && !editMode"
-        (click)="enableEdit()"
+      <button *ngIf="customer && !editMode" (click)="enableEdit()"
         class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold">
         Edit Profile
       </button>
@@ -32,65 +30,42 @@
 
       <div>
         <p class="text-xs text-slate-500">Nominee</p>
-        <input
-          *ngIf="editMode"
-          [(ngModel)]="editableCustomer.nominee"
-          class="w-full border rounded-lg px-3 py-2"
-        />
+        <input *ngIf="editMode" [(ngModel)]="editableCustomer.nominee" class="w-full border rounded-lg px-3 py-2" />
         <p *ngIf="!editMode" class="font-semibold">{{ customer.nominee }}</p>
       </div>
 
       <div>
         <p class="text-xs text-slate-500">Date of Birth</p>
-        <input
-          *ngIf="editMode"
-          type="date"
-          [(ngModel)]="editableCustomer.dateOfBirth"
-          class="w-full border rounded-lg px-3 py-2"
-        />
+        <input *ngIf="editMode" type="date" [(ngModel)]="editableCustomer.dateOfBirth"
+          class="w-full border rounded-lg px-3 py-2" />
         <p *ngIf="!editMode" class="font-semibold">{{ customer.dateOfBirth }}</p>
       </div>
 
       <div>
         <p class="text-xs text-slate-500">Aadhar Number</p>
-        <input
-          *ngIf="editMode"
-          [(ngModel)]="editableCustomer.aadharNumber"
-          class="w-full border rounded-lg px-3 py-2"
-        />
+        <input *ngIf="editMode" [(ngModel)]="editableCustomer.aadharNumber"
+          class="w-full border rounded-lg px-3 py-2" />
         <p *ngIf="!editMode" class="font-semibold">{{ customer.aadharNumber }}</p>
       </div>
 
       <div>
         <p class="text-xs text-slate-500">PAN Number</p>
-        <input
-          *ngIf="editMode"
-          [(ngModel)]="editableCustomer.panNumber"
-          class="w-full border rounded-lg px-3 py-2"
-        />
+        <input *ngIf="editMode" [(ngModel)]="editableCustomer.panNumber" class="w-full border rounded-lg px-3 py-2" />
         <p *ngIf="!editMode" class="font-semibold">{{ customer.panNumber }}</p>
       </div>
 
       <div class="sm:col-span-2">
         <p class="text-xs text-slate-500">Address</p>
-        <textarea
-          *ngIf="editMode"
-          [(ngModel)]="editableCustomer.address"
-          rows="3"
+        <textarea *ngIf="editMode" [(ngModel)]="editableCustomer.address" rows="3"
           class="w-full border rounded-lg px-3 py-2"></textarea>
         <p *ngIf="!editMode" class="font-semibold">{{ customer.address }}</p>
       </div>
 
       <div class="sm:col-span-2 border-t pt-6 flex justify-end gap-3" *ngIf="editMode">
-        <button
-          (click)="cancelEdit()"
-          class="px-4 py-2 rounded-lg border">
+        <button (click)="cancelEdit()" class="px-4 py-2 rounded-lg border">
           Cancel
         </button>
-        <button
-          (click)="saveChanges()"
-          [disabled]="saving"
-          class="px-4 py-2 rounded-lg bg-slate-900 text-white">
+        <button (click)="saveChanges()" [disabled]="saving" class="px-4 py-2 rounded-lg bg-slate-900 text-white">
           {{ saving ? 'Saving...' : 'Save Changes' }}
         </button>
       </div>

@@ -16,13 +16,14 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { CustomerLayoutComponent } from '../components/customer/customer-layout'
 import { DashboardComponent } from '../components/customer/pages/dashboard/dashboard'
-import { MarketplaceComponent } from '../components/customer/pages/policies/marketplace'
+import { PolicyCatalogComponent } from '../components/customer/pages/policies/policy-catalog'
 import { PolicyDetailsComponent } from '../components/customer/pages/policies/policy-details'
 import { PurchaseComponent } from '../components/customer/pages/policies/purchase'
 import { MyPoliciesComponent } from '../components/customer/pages/policies/my-policies'
 import { TrackClaimsComponent } from '../components/customer/pages/claims/track-claims'
 import { FileClaimComponent } from '../components/customer/pages/claims/file-claim'
 import { ProfileComponent } from '../components/customer/pages/profile/profile'
+
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
 
@@ -48,44 +49,45 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     component: CustomerLayoutComponent,
     children: [
-            {
-                path: '',
-                redirectTo: 'dashboard',
-                pathMatch: 'full'
-            },
-            {
-                path: 'dashboard',
-                component: DashboardComponent
-            },
-            {
-                path: 'marketplace',
-                component: MarketplaceComponent
-            },
-            {
-                path: 'policy-details/:id',
-                component: PolicyDetailsComponent
-            },
-            {
-                path: 'purchase/:id',
-                component: PurchaseComponent
-            },
-            {
-                path: 'my-policies',
-                component: MyPoliciesComponent
-            },
-            {
-                path: 'claims',
-                component: TrackClaimsComponent
-            },
-            {
-                path: 'file-claim',
-                component: FileClaimComponent
-            },
-            {
-                path: 'profile',
-                component: ProfileComponent
-            }
-        ]},
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path: 'policy-catalog',
+        component: PolicyCatalogComponent
+      },
+      {
+        path: 'policy-details/:id',
+        component: PolicyDetailsComponent
+      },
+      {
+        path: 'purchase/:id',
+        component: PurchaseComponent
+      },
+      {
+        path: 'my-policies',
+        component: MyPoliciesComponent
+      },
+      {
+        path: 'claims',
+        component: TrackClaimsComponent
+      },
+      {
+        path: 'file-claim',
+        component: FileClaimComponent
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
+      }
+    ]
+  },
   {
     path: 'agent',
     canActivate: [authGuard, roleGuard],
